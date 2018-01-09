@@ -13,11 +13,15 @@ public class TileScript : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		Food = Random.Range (1, 6);
 		Production = Random.Range (1, 8);
 		Gold = Random.Range (2, 5);
-		Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold);
+		Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold + "; TV:" + (Food + Production + Gold));
+	}
+
+	void Start () {
+
 	}
 	
 	// Update is called once per frame

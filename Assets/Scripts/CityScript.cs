@@ -5,7 +5,7 @@ using UnityEngine;
 public class CityScript : MonoBehaviour {
 
 	// private variables
-	private List<int> Citizens;
+	private List<Citizen> Citizens;
 	// The Integer value for each citizen denotes the citizen's location in terms of Tiles.
 	private GameObject[] Tiles;
 	/*
@@ -32,7 +32,7 @@ public class CityScript : MonoBehaviour {
 
 	// void Awake used for purposes of making savestring
 	void Awake () {
-		Citizens = new List<int>();
+		Citizens = new List<Citizen>();
 		Buildings = new List<Property> ();
 		Queue = new List<Property> ();
 		Queue.Add (PropertiesList.getList () [0]);
@@ -46,9 +46,9 @@ public class CityScript : MonoBehaviour {
 		}
 		// Placeholder
 
-		int citizen = Random.Range (1, Tiles.Length);
-		Citizens.Add (citizen);
-		Debug.Log (citizen + ", " + Citizens.Count);
+		//int cPos = Random.Range (1, Tiles.Length);
+		//Citizens.Add (new Citizen(cPos));
+		//NewCitizen ();
 
 		currentFood = 0;
 		currentProd = 0;
@@ -80,6 +80,8 @@ public class CityScript : MonoBehaviour {
 		currentProd = 0;
 		currentGold = 0;
 		*/
+		NewCitizen ();
+		Debug.Log (Citizens[0].getPosition() + ", " + Citizens.Count);
 	}
 	
 	// Update is called once per frame
@@ -88,6 +90,26 @@ public class CityScript : MonoBehaviour {
 	}
 
 	// private methods
+
+	private Citizen getCitizenOnTile(int tileNumber) { // method to find the citizen on a specific tile/position, if there is one
+		foreach (Citizen civilian in Citizens) {
+			if (civilian.getPosition() == tileNumber) {
+				return civilian;
+			}
+		}
+
+		return null;
+	}
+
+	private bool isCitizenOnTile(int tileNumber) { // method to if there is a citizen on a specific tile/position
+		foreach (Citizen civilian in Citizens) {
+			if (civilian.getPosition() == tileNumber) {
+				return true;
+			}
+		}
+
+		return false;
+	}
 
 	private void AttemptConstruction() {
 		if (currentProd >= Queue [0].getCost ()) {
@@ -109,6 +131,12 @@ public class CityScript : MonoBehaviour {
 	private int FoodRule() {
 		return (int) (Mathf.Exp (1.3f) * (float) Citizens.Count);
 
+	}
+
+	private int getTileValue(int tileNo) {
+		return Tiles [tileNo].GetComponent<TileScript> ().getFood ()
+			+ Tiles [tileNo].GetComponent<TileScript> ().getProduction ()
+			+ Tiles [tileNo].GetComponent<TileScript> ().getGold ();
 	}
 
 	// public methods
@@ -142,20 +170,48 @@ public class CityScript : MonoBehaviour {
 		}
 	}
 
-	public void NewCitizen() {
+	public void NewCitizen() { // <--- This Function right here behaves interestingly
 		int nCitizen = 0;
-		nCitizen = Random.Range (1, Tiles.Length);
-		// Eventually will need to add a check such that citizens don't occupy the same tile
+		/* Random placement
+		if (Citizens.Count < Tiles.Length - 1) {
+			bool passedTest = false;
+			while (!passedTest) {
+				nCitizen = Random.Range (1, Tiles.Length);
+				if (!isCitizenOnTile(nCitizen)) {
+					passedTest = true;
+				}
+			}
+		}
+		*/
+
+		// Deterministic placement
+		if (Citizens.Count < Tiles.Length - 1) {
+			int hiTilePos = 1;
+			for (int iCount = 1; iCount < Tiles.Length; iCount++) {
+				if (getTileValue (iCount) <= getTileValue (hiTilePos)) {
+					hiTilePos = iCount;
+				}
+			}
+
+			for (int iCount = 1; iCount < Tiles.Length; iCount++) {
+				//Debug.Log ("icount:" + iCount + "; ictv:" + getTileValue(iCount) + "; htptv:" + getTileValue(hiTilePos));
+				if (getTileValue (iCount) > getTileValue (hiTilePos) && !isCitizenOnTile (iCount)) {
+					hiTilePos = iCount;
+				}
+			}
+			nCitizen = hiTilePos;
+		}
 
 
-		Citizens.Add (nCitizen);
+		Citizens.Add (new Citizen(nCitizen));
 	}
 
 	public bool MoveCitizen(int oldPos, int newPos) {
 		bool done = false;
 		if (newPos >= 0 && newPos < Tiles.Length) {
-			if (Citizens.Remove (oldPos)) {
-				Citizens.Add (newPos);
+			Citizen civilian;
+			if ((civilian = getCitizenOnTile(oldPos)) != null && (!isCitizenOnTile(newPos) || newPos == 0)) {
+				civilian.moveTo (newPos);
 				done = true;
 			}
 		}
@@ -195,9 +251,9 @@ public class CityScript : MonoBehaviour {
 
 	public int getTotalFood() { // Note: more of a "get total amount of food produced per turn"
 		int totalFood = 0;
-		foreach (int citizen in Citizens) {
-			if (citizen != 0) {
-				totalFood += Tiles [citizen].GetComponent<TileScript> ().getFood ();
+		foreach (Citizen citizen in Citizens) {
+			if (citizen.getPosition() != 0) {
+				totalFood += Tiles [citizen.getPosition()].GetComponent<TileScript> ().getFood ();
 				Debug.Log(totalFood);
 			}
 		}
@@ -217,9 +273,9 @@ public class CityScript : MonoBehaviour {
 
 	public int getTotalProd() { // Note: more of a "get total amount of production produced per turn"
 		int totalProd = 0;
-		foreach (int citizen in Citizens) {
-			if (citizen != 0) {
-				totalProd += Tiles [citizen].GetComponent<TileScript> ().getProduction ();
+		foreach (Citizen citizen in Citizens) {
+			if (citizen.getPosition() != 0) {
+				totalProd += Tiles [citizen.getPosition()].GetComponent<TileScript> ().getProduction ();
 			}
 		}
 
@@ -235,9 +291,9 @@ public class CityScript : MonoBehaviour {
 
 	public int getTotalGold() { // Note: more of a "get total amount of gold produced per turn"
 		int totalGold = 0;
-		foreach (int citizen in Citizens) {
-			if (citizen != 0) {
-				totalGold += Tiles [citizen].GetComponent<TileScript> ().getGold ();
+		foreach (Citizen citizen in Citizens) {
+			if (citizen.getPosition() != 0) {
+				totalGold += Tiles [citizen.getPosition()].GetComponent<TileScript> ().getGold ();
 			}
 		}
 
@@ -255,8 +311,8 @@ public class CityScript : MonoBehaviour {
 
 	public string getCitizenLocations() {
 		string returnString = "";
-		foreach (int citizen in Citizens) {
-			returnString = returnString + citizen + ", ";
+		foreach (Citizen citizen in Citizens) {
+			returnString = returnString + citizen.getPosition() + ", ";
 		}
 
 		return returnString;

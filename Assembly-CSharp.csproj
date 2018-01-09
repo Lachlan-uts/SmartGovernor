@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\Scripts\Citizen.cs" />
      <Compile Include="Assets\Scripts\CityScript.cs" />
      <Compile Include="Assets\Scripts\CLIScript.cs" />
      <Compile Include="Assets\Scripts\InputManagementScript.cs" />
