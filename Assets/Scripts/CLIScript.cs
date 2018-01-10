@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -19,12 +20,15 @@ public class CLIScript : MonoBehaviour {
 	private string SaveString; // Used for storing the player's actions in a string format, as well as city details
 
 
+
 	// Use this for initialization
 	void Start () {
 		CLIStrings = new List<string>();
 		CLIStrings.Add ("Unity CLI Version 0.2a: Awaiting Input...");
 		//CLITextInput.ActivateInputField ();
+		//SaveString = "" + Random.state + ":";
 		SaveString = "";
+		Debug.Log ("SaveString: " + SaveString);
 	}
 	
 	// Update is called once per frame
@@ -48,6 +52,24 @@ public class CLIScript : MonoBehaviour {
 		return CLIText;
 	}
 
+	// Save/Load stuff
+	void WriteTo() {
+		string path = "Assets/Resources/test.txt";
+		System.IO.File.WriteAllText (path, "");
+		StreamWriter writer = new StreamWriter (path, true);
+		//writer.Flush ();
+		writer.WriteLine (SaveString);
+		writer.Close ();
+	}
+
+	string LoadFrom() {
+		SaveString = "";
+		string path = "Assets/Resources/test.txt";
+		StreamReader reader = new StreamReader (path);
+		string returnString = reader.ReadLine ();
+		reader.Close ();
+		return returnString;
+	}
 
 	// Commands
 	void Print(string[] CommandParams) {
@@ -64,7 +86,7 @@ public class CLIScript : MonoBehaviour {
 		City.GetComponent<CityScript> ().CityUpdate ();
 
 		CLIStrings.Add ("City Updated...");
-		SaveString += "";
+		//SaveString += "";
 	}
 
 	void AddCitizen() {
@@ -149,7 +171,84 @@ public class CLIScript : MonoBehaviour {
 
 	// Public methods
 	public void command() {
+		bool addToSS = true;
 		string InputCommand = CLITextInput.text;
+		string[] CommandParams = InputCommand.Split(' ');
+		//CLIStrings.Add ("Command: " + InputCommand);
+
+		switch (CommandParams [0].ToLower()) {
+		case "save":
+			WriteTo ();
+			addToSS = false;
+			break;
+		case "load":
+			string LoadedString = LoadFrom ();
+			string[] newCommandParams = LoadedString.Split (':');
+			foreach (string commandPhrase in newCommandParams) {
+				command (commandPhrase);
+			}
+			addToSS = false;
+			break;
+		case "move":
+			int x1, x2 = 0;
+			bool x1d = int.TryParse(CommandParams [1], out x1);
+			bool x2d = int.TryParse(CommandParams [2], out x2);
+			if ((x1d) && (x2d)) {
+				MoveCitizen (x1, x2);
+			}
+			break;
+		case "update":
+			UpdateCity ();
+			break;
+		case "remove":
+			RemoveLastItemFromCityQueue ();
+			break;
+		case "add":
+			AddToCityQueue (CommandParams [1].ToLower ());
+			break;
+		case "replace":
+			ReplaceQueueStart (CommandParams [1].ToLower ());
+			break;
+		case "getcitizens":
+			GetCitizens ();
+			break;
+		case "newcitizen":
+			AddCitizen ();
+			break;
+		case "getqueue":
+			GetQueueOfCity ();
+			break;
+		case "getgold":
+			GetGoldProduction ();
+			break;
+		case "getprod":
+			GetProdProduction ();
+			break;
+		case "getfood":
+			GetFoodProduction ();
+			break;
+		case "print":
+			Print (CommandParams);
+			break;
+		default:
+			CLIStrings.Add ("Command: " + InputCommand);
+			addToSS = false;
+			break;
+		}
+
+		if (addToSS) {
+			SaveString = SaveString + ":" + InputCommand;
+		}
+		Debug.Log (SaveString);
+
+		CLITextInput.text = "";
+		CLITextInput.ActivateInputField ();
+	}
+
+	// Alternative 'command', used normally through loading. Likewise, cannot execute save/load functionality by design
+	public void command(string InputCommand) {
+		bool addToSS = true;
+		//string InputCommand = CLITextInput.text;
 		string[] CommandParams = InputCommand.Split(' ');
 		//CLIStrings.Add ("Command: " + InputCommand);
 
@@ -197,9 +296,14 @@ public class CLIScript : MonoBehaviour {
 			break;
 		default:
 			CLIStrings.Add ("Command: " + InputCommand);
+			addToSS = false;
 			break;
 		}
 
+		if (addToSS) {
+			SaveString = SaveString + ":" + InputCommand;
+		}
+		Debug.Log (SaveString);
 
 		CLITextInput.text = "";
 		CLITextInput.ActivateInputField ();

@@ -25,6 +25,8 @@ public class CityScript : MonoBehaviour {
 	private List<Property> Buildings;
 	private List<Property> Queue;
 
+	private int randomSeed = 10; //For purposes of consistency in testing the AI
+
 
 	// serialized private fields
 	[SerializeField]
@@ -32,6 +34,7 @@ public class CityScript : MonoBehaviour {
 
 	// void Awake used for purposes of making savestring
 	void Awake () {
+		Random.InitState (randomSeed);
 		Citizens = new List<Citizen>();
 		Buildings = new List<Property> ();
 		Queue = new List<Property> ();
@@ -39,6 +42,7 @@ public class CityScript : MonoBehaviour {
 		Tiles = new GameObject[9]; // Eventually will grab Tiles from the map
 		// Placeholder
 		for ( int i = 0; i < Tiles.Length; i++ ) {
+			Debug.Log ("Tile: " + i);
 			GameObject Tile = Instantiate (BaseTile, new Vector3 (0.0f, 0.0f, 0.0f), Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
 			//Debug.Log ("Tile:" + i + "; F:" + Tile.GetComponent<TileScript>().getFood() + "; P:" + Tile.GetComponent<TileScript>().getProduction() + "; G:"
 			//	+ Tile.GetComponent<TileScript>().getGold());
@@ -89,6 +93,43 @@ public class CityScript : MonoBehaviour {
 		
 	}
 
+	// public "loadFromString" 
+	public void LoadFromString(string CityString) {
+		string[] TileString = CityString.Split (';');
+		Citizens = new List<Citizen>();
+		Buildings = new List<Property> ();
+		Queue = new List<Property> ();
+		Queue.Add (PropertiesList.getList () [0]);
+		Tiles = new GameObject[9]; // Eventually will grab Tiles from the map
+		// Placeholder
+		for ( int i = 0; i < Tiles.Length; i++ ) {
+			Debug.Log ("Tile: " + i);
+			//Debug.Log ("Tile:" + i + "; F:" + Tile.GetComponent<TileScript>().getFood() + "; P:" + Tile.GetComponent<TileScript>().getProduction() + "; G:"
+			//	+ Tile.GetComponent<TileScript>().getGold());
+			Tiles [i].GetComponent<TileScript>().LoadFromString(TileString[i]);
+		}
+
+		currentFood = 0;
+		currentProd = 0;
+		currentGold = 0;
+
+
+	}
+
+	public string SaveToString() {
+		string returnString = "";
+		returnString = returnString + Tiles [0].GetComponent<TileScript> ().getFood () + ","
+			+ Tiles [0].GetComponent<TileScript> ().getProduction () + ","
+			+ Tiles [0].GetComponent<TileScript> ().getGold ();
+		for (int iCount = 1; iCount < Tiles.Length; iCount++) {
+			returnString = returnString + ";" + Tiles [iCount].GetComponent<TileScript> ().getFood () + ","
+				+ Tiles [iCount].GetComponent<TileScript> ().getProduction () + ","
+				+ Tiles [iCount].GetComponent<TileScript> ().getGold ();
+		}
+
+		return returnString;
+	}
+
 	// private methods
 
 	private Citizen getCitizenOnTile(int tileNumber) { // method to find the citizen on a specific tile/position, if there is one
@@ -134,9 +175,13 @@ public class CityScript : MonoBehaviour {
 	}
 
 	private int getTileValue(int tileNo) {
-		return Tiles [tileNo].GetComponent<TileScript> ().getFood ()
+		if (tileNo != 0) {
+			return Tiles [tileNo].GetComponent<TileScript> ().getFood ()
 			+ Tiles [tileNo].GetComponent<TileScript> ().getProduction ()
 			+ Tiles [tileNo].GetComponent<TileScript> ().getGold ();
+		}
+
+		return 0;
 	}
 
 	// public methods
@@ -186,12 +231,12 @@ public class CityScript : MonoBehaviour {
 
 		// Deterministic placement
 		if (Citizens.Count < Tiles.Length - 1) {
-			int hiTilePos = 1;
-			for (int iCount = 1; iCount < Tiles.Length; iCount++) {
-				if (getTileValue (iCount) <= getTileValue (hiTilePos)) {
-					hiTilePos = iCount;
-				}
-			}
+			int hiTilePos = 0;
+			//for (int iCount = 1; iCount < Tiles.Length; iCount++) {
+			//	if (getTileValue (iCount) <= getTileValue (hiTilePos)) {
+			//		hiTilePos = iCount;
+			//	}
+			//}
 
 			for (int iCount = 1; iCount < Tiles.Length; iCount++) {
 				//Debug.Log ("icount:" + iCount + "; ictv:" + getTileValue(iCount) + "; htptv:" + getTileValue(hiTilePos));

@@ -30,7 +30,13 @@ public class TileScript : MonoBehaviour {
 	}
 
 	// public methods
-	
+	public void LoadFromString(string TileString) {
+		string[] TileParams = TileString.Split (',');
+		int.TryParse (TileParams [0], out Food);
+		int.TryParse (TileParams [1], out Production);
+		int.TryParse (TileParams [2], out Gold);
+		Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold + "; TV:" + (Food + Production + Gold));
+	}
 
 	// get methodology
 	public int getFood() {
