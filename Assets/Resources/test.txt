@@ -1,1 +1,1 @@
-:add mine:add coinage:getqueue
+:replace mine:add coinage:add mine:add granary:add factory:add mine:add coinage:update:update:update:update:update:getqueue:add mine:add mine:update:update:update:getcitizens

@@ -55,6 +55,7 @@
      <Compile Include="Assets\Scripts\CityScript.cs" />
      <Compile Include="Assets\Scripts\CLIScript.cs" />
      <Compile Include="Assets\Scripts\InputManagementScript.cs" />
+     <Compile Include="Assets\Scripts\MapGenerationScript.cs" />
      <Compile Include="Assets\Scripts\PropertiesList.cs" />
      <Compile Include="Assets\Scripts\Property.cs" />
      <Compile Include="Assets\Scripts\ResourceScript.cs" />

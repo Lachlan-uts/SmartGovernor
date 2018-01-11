@@ -182,10 +182,27 @@ public class CLIScript : MonoBehaviour {
 			addToSS = false;
 			break;
 		case "load":
-			string LoadedString = LoadFrom ();
-			string[] newCommandParams = LoadedString.Split (':');
-			foreach (string commandPhrase in newCommandParams) {
-				command (commandPhrase);
+			if (CommandParams.Length > 1) {
+				int curTurns = 0;
+				int maxTurns = 0;
+				int.TryParse (CommandParams [1], out maxTurns);
+				string LoadedString = LoadFrom ();
+				string[] newCommandParams = LoadedString.Split (':');
+				foreach (string commandPhrase in newCommandParams) {
+					if (curTurns <= maxTurns) {
+						command (commandPhrase);
+					}
+
+					if ((commandPhrase.Split(' '))[0] == "update" ) {
+						curTurns++;
+					}
+				}
+			} else {
+				string LoadedString = LoadFrom ();
+				string[] newCommandParams = LoadedString.Split (':');
+				foreach (string commandPhrase in newCommandParams) {
+					command (commandPhrase);
+				}
 			}
 			addToSS = false;
 			break;
