@@ -679,6 +679,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a477e5d18ff97214caf363a2546e61f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  useMap: 0
   BaseTile: {fileID: 1310893222}
 --- !u!4 &1023606475
 Transform:

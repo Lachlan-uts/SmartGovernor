@@ -4,13 +4,13 @@
     <Files>
       <File FileName="Assets\Scripts\CLIScript.cs" Line="198" Column="7" />
       <File FileName="Assets\Scripts\InputManagementScript.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CityScript.cs" Line="117" Column="3" />
-      <File FileName="Assets\Scripts\TileScript.cs" Line="37" Column="37" />
+      <File FileName="Assets\Scripts\CityScript.cs" Line="58" Column="4" />
+      <File FileName="Assets\Scripts\TileScript.cs" Line="57" Column="18" />
       <File FileName="Assets\Scripts\ResourceScript.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Property.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\PropertiesList.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\Citizen.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\MapGenerationScript.cs" Line="51" Column="75" />
+      <File FileName="Assets\Scripts\MapGenerationScript.cs" Line="103" Column="132" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

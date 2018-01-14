@@ -25,28 +25,37 @@ public class CityScript : MonoBehaviour {
 	private List<Property> Buildings;
 	private List<Property> Queue;
 
+
 	private int randomSeed = 10; //For purposes of consistency in testing the AI
 
 
 	// serialized private fields
 	[SerializeField]
+	private bool useMap = true; // Set to "false" for the CLI Scene
+	[SerializeField]
 	private GameObject BaseTile;
+
+
 
 	// void Awake used for purposes of making savestring
 	void Awake () {
-		Random.InitState (randomSeed);
-		Citizens = new List<Citizen>();
-		Buildings = new List<Property> ();
-		Queue = new List<Property> ();
-		Queue.Add (PropertiesList.getList () [0]);
-		Tiles = new GameObject[9]; // Eventually will grab Tiles from the map
-		// Placeholder
-		for ( int i = 0; i < Tiles.Length; i++ ) {
-			Debug.Log ("Tile: " + i);
-			GameObject Tile = Instantiate (BaseTile, new Vector3 (0.0f, 0.0f, 0.0f), Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
-			//Debug.Log ("Tile:" + i + "; F:" + Tile.GetComponent<TileScript>().getFood() + "; P:" + Tile.GetComponent<TileScript>().getProduction() + "; G:"
-			//	+ Tile.GetComponent<TileScript>().getGold());
-			Tiles [i] = Tile;
+		if (!useMap) {
+			Random.InitState (randomSeed);
+			Citizens = new List<Citizen> ();
+			Buildings = new List<Property> ();
+			Queue = new List<Property> ();
+			Queue.Add (PropertiesList.getList () [0]);
+			Tiles = new GameObject[9]; // Eventually will grab Tiles from the map
+			// Placeholder
+			for (int i = 0; i < Tiles.Length; i++) {
+				Debug.Log ("Tile: " + i);
+				GameObject Tile = Instantiate (BaseTile, new Vector3 (0.0f, 0.0f, 0.0f), Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
+				//Debug.Log ("Tile:" + i + "; F:" + Tile.GetComponent<TileScript>().getFood() + "; P:" + Tile.GetComponent<TileScript>().getProduction() + "; G:"
+				//	+ Tile.GetComponent<TileScript>().getGold());
+				Tiles [i] = Tile;
+			}
+		} else {
+
 		}
 		// Placeholder
 

@@ -27,6 +27,8 @@ public class MapGenerationScript : MonoBehaviour {
 	private float noiseX = 20;
 	[SerializeField]
 	private float noiseZ = 15;
+	[SerializeField]
+	private float tileSize = 4.0f;
 
 	private GameObject[,] tileList;
 
@@ -88,12 +90,17 @@ public class MapGenerationScript : MonoBehaviour {
 			while (zCount < zMax) {
 				var perlin = Mathf.PerlinNoise (xCount / noiseX, zCount / noiseZ);
 				T = (GameObject) Instantiate (baseTile, 
-					new Vector3(xCount*widthCount, 2.0f * perlin, zCount*lengthCount), 
+					new Vector3(xCount*widthCount*tileSize, 0.0f, zCount*lengthCount*tileSize), 
 					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
 				//T.GetComponent<Material> ().SetColor("ColourGrad:" + perlin, Color.Lerp (Color.green, Color.gray, perlin));
 				tileList [(int)xCount, (int)zCount] = T;
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
-				tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));
+				//tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));
+				int foodPerlin = (int) Mathf.Lerp(1.0f, 5.0f, perlin);
+				int prodPerlin = (int) Mathf.Lerp(2.0f, 6.0f, perlin);
+				int goldPerlin = (int) Mathf.Lerp(2.0f, 6.0f, perlin);
+				int maxTreePerlin = (int)Mathf.Lerp (0.0f, 4.0f, perlin);
+				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetResources (foodPerlin, prodPerlin, goldPerlin, maxTreePerlin);
 				zCount += 1.0f;
 				curStepCount++;
 				if (curStepCount >= maxSteps) {
