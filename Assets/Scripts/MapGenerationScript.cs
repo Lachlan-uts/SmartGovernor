@@ -14,6 +14,12 @@ public class MapGenerationScript : MonoBehaviour {
 	private float timeCur = 0.0f;
 	private bool activeGen;
 
+	// private perlin noise map seeds
+	private float forestPerlinSeed;
+	private float heightPerlinSeed;
+	private float ariaPerlinSeed;
+	private float minePerlinSeed;
+
 	// Serialized private variables
 	[SerializeField]
 	private float xMax = 160.0f;
@@ -37,6 +43,11 @@ public class MapGenerationScript : MonoBehaviour {
 		tileList = new GameObject[(int) xMax, (int) zMax];
 		curGenStep = 0;
 		activeGen = true;
+		Random.InitState (randomSeed);
+		forestPerlinSeed = Random.Range (0, 1500);
+		heightPerlinSeed = Random.Range (0, 1500);
+		ariaPerlinSeed = Random.Range (0, 1500);
+		minePerlinSeed = Random.Range (0, 1500);
 		//GenerateNoiseMap ();
 	}
 	
@@ -50,7 +61,7 @@ public class MapGenerationScript : MonoBehaviour {
 			if (curGenStep >= (xMax * zMax)) {
 				activeGen = false;
 			}
-			Debug.Log ("step: " + curGenStep + " ; zM*xM: " + (zMax * xMax) + " ; ");
+			//Debug.Log ("step: " + curGenStep + " ; zM*xM: " + (zMax * xMax) + " ; ");
 		}
 	}
 
@@ -88,19 +99,22 @@ public class MapGenerationScript : MonoBehaviour {
 
 		while (xCount < xMax) {
 			while (zCount < zMax) {
-				var perlin = Mathf.PerlinNoise (xCount / noiseX, zCount / noiseZ);
+				var hPerlin = Mathf.PerlinNoise (heightPerlinSeed + xCount / noiseX, heightPerlinSeed + zCount / noiseZ);
+				var tPerlin = Mathf.PerlinNoise (forestPerlinSeed + xCount / noiseX, forestPerlinSeed + zCount / noiseZ);
+				var aPerlin = Mathf.PerlinNoise (ariaPerlinSeed + xCount / noiseX, ariaPerlinSeed + zCount / noiseZ);
+				var mPerlin = Mathf.PerlinNoise (minePerlinSeed + xCount / noiseX, minePerlinSeed + zCount / noiseZ);
 				T = (GameObject) Instantiate (baseTile, 
-					new Vector3(xCount*widthCount*tileSize, 0.0f, zCount*lengthCount*tileSize), 
+					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
 					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
 				//T.GetComponent<Material> ().SetColor("ColourGrad:" + perlin, Color.Lerp (Color.green, Color.gray, perlin));
 				tileList [(int)xCount, (int)zCount] = T;
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
 				//tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));
-				int foodPerlin = (int) Mathf.Lerp(1.0f, 5.0f, perlin);
-				int prodPerlin = (int) Mathf.Lerp(2.0f, 6.0f, perlin);
-				int goldPerlin = (int) Mathf.Lerp(2.0f, 6.0f, perlin);
-				int maxTreePerlin = (int)Mathf.Lerp (0.0f, 4.0f, perlin);
-				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetResources (foodPerlin, prodPerlin, goldPerlin, maxTreePerlin);
+				//int foodPerlin = (int) Mathf.Lerp(1.0f, 5.0f, hPerlin);
+				//int prodPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
+				//int goldPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
+				//int maxTreePerlin = (int)Mathf.Lerp (0.0f, 4.0f, hPerlin);
+				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin);
 				zCount += 1.0f;
 				curStepCount++;
 				if (curStepCount >= maxSteps) {
