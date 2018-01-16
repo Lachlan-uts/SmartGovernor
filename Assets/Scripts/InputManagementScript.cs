@@ -4,6 +4,12 @@ using UnityEngine;
 
 public class InputManagementScript : MonoBehaviour {
 
+	// serialized private variable
+	[SerializeField]
+	private GameObject MCamera;
+	[SerializeField]
+	private float MCSpeed = 1.0f;
+
 	// Use this for initialization
 	void Start () {
 		
@@ -19,5 +25,21 @@ public class InputManagementScript : MonoBehaviour {
 				CLIManager.GetComponent<CLIScript>().pressInputField();
 			}
 		}
+
+		if (MCamera != null) {
+			float relZChange = Input.GetAxis ("Vertical") * MCSpeed * Time.deltaTime;
+			float relXChange = Input.GetAxis ("Horizontal") * MCSpeed * Time.deltaTime;
+
+			MCamera.transform.Translate (new Vector3 (relXChange, 0.0f, relZChange));
+
+			if (Input.GetAxis ("Mouse ScrollWheel") > 0.01f) {
+				MCamera.transform.Translate (new Vector3 (0.0f, -(0.2f * MCSpeed), (0.2f * MCSpeed)));
+			} else if (Input.GetAxis ("Mouse ScrollWheel") < -0.01f) {
+				MCamera.transform.Translate (new Vector3 (0.0f, (0.2f * MCSpeed), -(0.2f * MCSpeed)));
+			}
+
+		}
+
+
 	}
 }

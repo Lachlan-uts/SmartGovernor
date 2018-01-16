@@ -57,9 +57,9 @@ public class TileScript : MonoBehaviour {
 
 	// MouseOverFunctions
 
-	void OnMouseOver() {
-		Debug.Log ("Tile:" + name + "; F:" + Food + "; P:" + Production + "; G:" + Gold + "; H:" + height);
-	}
+	//void OnMouseOver() {
+	//	Debug.Log ("Tile:" + name + "; F:" + Food + "; P:" + Production + "; G:" + Gold + "; H:" + height);
+	//}
 
 	// public methods
 	public void SetResources(int newFood, int newProd, int newGold, int maxTreeCount) {

@@ -25,7 +25,7 @@ GameObject:
   - component: {fileID: 23423947901685254}
   m_Layer: 0
   m_Name: BaseTile
-  m_TagString: Untagged
+  m_TagString: Tile
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -107,3 +107,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5ce1971ce51edc645833cc506857b095, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  randomGen: 1
+  canSet: 0
+  Trees: []
