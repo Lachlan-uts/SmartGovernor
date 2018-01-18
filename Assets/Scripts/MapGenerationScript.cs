@@ -114,7 +114,7 @@ public class MapGenerationScript : MonoBehaviour {
 				//int prodPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
 				//int goldPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
 				//int maxTreePerlin = (int)Mathf.Lerp (0.0f, 4.0f, hPerlin);
-				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin);
+				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
 				zCount += 1.0f;
 				curStepCount++;
 				if (curStepCount >= maxSteps) {
@@ -129,6 +129,11 @@ public class MapGenerationScript : MonoBehaviour {
 		}
 
 
+	}
+
+	// get methodology
+	public GameObject getTileAt(int XCoord, int ZCoord) {
+		return tileList [XCoord, ZCoord];
 	}
 
 }

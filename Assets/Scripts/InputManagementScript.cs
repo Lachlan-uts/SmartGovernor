@@ -6,6 +6,8 @@ public class InputManagementScript : MonoBehaviour {
 
 	// serialized private variable
 	[SerializeField]
+	private GameObject City;
+	[SerializeField]
 	private GameObject MCamera;
 	[SerializeField]
 	private float MCSpeed = 1.0f;
@@ -42,4 +44,11 @@ public class InputManagementScript : MonoBehaviour {
 
 
 	}
+
+	// public methods
+	public void colonize(Vector3 position, int XCoord, int ZCoord) {
+		GameObject newCity = Instantiate (City, position, Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
+		newCity.GetComponent<CityScript> ().setCoordinates (XCoord, ZCoord);
+	}
+
 }

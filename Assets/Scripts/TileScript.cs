@@ -19,7 +19,10 @@ public class TileScript : MonoBehaviour {
 	private int Gold;
 
 	// Metadata
+	private bool hasCity;
 	private float height;
+	private int XCoord = 0; // Locally stored reference data for GUI streamlining
+	private int ZCoord = 0; // Locally stored reference data for GUI streamlining
 
 	// serialized private variables
 	[SerializeField]
@@ -32,6 +35,7 @@ public class TileScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		hasCity = false;
 		if (randomGen) {
 			height = 0.0f;
 			Food = Random.Range (1, 6);
@@ -81,7 +85,7 @@ public class TileScript : MonoBehaviour {
 		}
 	}
 
-	public void SetStatistics(float heightPerlin, float forestPerlin, float ariaPerlin, float minePerlin) {
+	public void SetStatistics(float heightPerlin, float forestPerlin, float ariaPerlin, float minePerlin, int newX, int newZ) {
 		if (!randomGen && canSet) {
 			height = 50.0f * ((int) Mathf.Lerp(0.0f, 10.0f, heightPerlin));
 			int numTrees = 0;
@@ -109,6 +113,9 @@ public class TileScript : MonoBehaviour {
 				}
 			}
 
+			XCoord = newX;
+			ZCoord = newZ;
+
 			//Debug.Log ("Tile:" + name + "; F:" + Food + "; P:" + Production + "; G:" + Gold + "; H:" + height);
 
 			randomGen = true;
@@ -121,6 +128,14 @@ public class TileScript : MonoBehaviour {
 		int.TryParse (TileParams [1], out Production);
 		int.TryParse (TileParams [2], out Gold);
 		Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold + "; TV:" + (Food + Production + Gold));
+	}
+
+	public void createCity() {
+		if (!hasCity) {
+			hasCity = true;
+			// Code to create a city on this tile
+			GameObject.FindWithTag("InputManager").GetComponent<InputManagementScript>().colonize(transform.position, XCoord, ZCoord);
+		}
 	}
 
 	// get methodology
@@ -138,5 +153,13 @@ public class TileScript : MonoBehaviour {
 
 	public float getHeight() {
 		return height;
+	}
+
+	public int getXCoord() {
+		return XCoord;
+	}
+
+	public int getZCoord() {
+		return ZCoord;
 	}
 }

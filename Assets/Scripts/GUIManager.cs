@@ -18,6 +18,8 @@ public class GUIManager : MonoBehaviour {
 	private Text goldText;
 	[SerializeField]
 	private Text heightText;
+	[SerializeField]
+	private Text coordText;
 
 	private GameObject selectedObject;
 
@@ -34,24 +36,61 @@ public class GUIManager : MonoBehaviour {
 		Ray cameraRay = MCamera.ScreenPointToRay (Input.mousePosition);
 		//Debug.Log ("hitPoint: " + hit.transform.position);
 
-		if (Physics.Raycast(cameraRay, out hit)) {
+		if (Physics.Raycast(cameraRay, out hit) && !selectedObject) {
 			//Debug.Log ("hitPoint: " + hit.transform.position);
 			if (hit.collider.tag == "Tile") {
 				foodText.text = "" + hit.collider.GetComponent<TileScript> ().getFood ();
 				prodText.text = "" + hit.collider.GetComponent<TileScript> ().getProduction ();
 				goldText.text = "" + hit.collider.GetComponent<TileScript> ().getGold ();
 				heightText.text = "" + hit.collider.GetComponent<TileScript> ().getHeight ();
+				coordText.text = hit.collider.GetComponent<TileScript> ().getXCoord () + "/" + hit.collider.GetComponent<TileScript> ().getZCoord ();
+			} else {
+				foodText.text = "--";
+				prodText.text = "--";
+				goldText.text = "--";
+				heightText.text = "--";
+				coordText.text = "--/--";
 			}
-		} /*else if (!(selectedObject)) {
-			foodText.text = "";
-			prodText.text = "";
-			goldText.text = "";
-			heightText.text = "";
-		}*/ else {
-			foodText.text = "Uh";
-			prodText.text = "Uh";
-			goldText.text = "Uh";
-			heightText.text = "Uh";
+		} else if (!(selectedObject)) {
+			foodText.text = "--";
+			prodText.text = "--";
+			goldText.text = "--";
+			heightText.text = "--";
+			coordText.text = "--/--";
+		} else {
+
+			switch (selectedObject.tag) {
+			case "City":
+				GameObject refTile = selectedObject.GetComponent<CityScript> ().getTileAtOrigin ();
+				foodText.text = "" + refTile.GetComponent<TileScript>().getFood();
+				prodText.text = "" + refTile.GetComponent<TileScript>().getProduction();
+				goldText.text = "" + refTile.GetComponent<TileScript>().getGold();
+				heightText.text = "" + refTile.GetComponent<TileScript>().getHeight();
+				coordText.text = "" + refTile.GetComponent<TileScript> ().getXCoord () + "/" + selectedObject.GetComponent<TileScript> ().getZCoord ();
+				break;
+			case "Tile":
+				foodText.text = "" + selectedObject.GetComponent<TileScript>().getFood();
+				prodText.text = "" + selectedObject.GetComponent<TileScript>().getProduction();
+				goldText.text = "" + selectedObject.GetComponent<TileScript>().getGold();
+				heightText.text = "" + selectedObject.GetComponent<TileScript>().getHeight();
+				coordText.text = "" + selectedObject.GetComponent<TileScript> ().getXCoord () + "/" + selectedObject.GetComponent<TileScript> ().getZCoord ();
+				break;
+			default:
+				foodText.text = "--";
+				prodText.text = "--";
+				goldText.text = "--";
+				heightText.text = "--";
+				coordText.text = "--/--";
+				break;
+			}
+		}
+
+		if (Input.GetButtonDown ("Fire1")) {
+			if (Physics.Raycast(cameraRay, out hit) && !selectedObject) {
+				selectedObject = hit.collider.gameObject;
+			} else {
+				selectedObject = null;
+			}
 		}
 
 		/*
@@ -86,8 +125,24 @@ public class GUIManager : MonoBehaviour {
 
 	}
 
+	// private methods
+
+
+
 	// public methods
 
+	public void createCity() {
+		if (selectedObject) {
+			if (selectedObject.CompareTag ("Tile")) {
+				selectedObject.GetComponent<TileScript> ().createCity ();
+			}
+		}
+	}
 
+	// get methodology
+
+	public GameObject getSelectedObject() {
+		return selectedObject;
+	}
 
 }

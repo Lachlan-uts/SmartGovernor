@@ -22,6 +22,10 @@ public class CityScript : MonoBehaviour {
 	private int currentProd; // Temporary variable for future production resource
 	private int currentGold; // Temporary variable for future gold accumulation
 
+	private int XCoord = -1;
+	private int ZCoord = -1;
+	// Map coordinates
+
 	private List<Property> Buildings;
 	private List<Property> Queue;
 
@@ -55,7 +59,11 @@ public class CityScript : MonoBehaviour {
 				Tiles [i] = Tile;
 			}
 		} else {
-
+			Citizens = new List<Citizen> ();
+			Buildings = new List<Property> ();
+			Queue = new List<Property> ();
+			Queue.Add (PropertiesList.getList () [0]);
+			Tiles = new GameObject[9];
 		}
 		// Placeholder
 
@@ -100,6 +108,25 @@ public class CityScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void setCoordinates(int newX, int newZ) {
+		if (XCoord == -1 && ZCoord == -1) {
+			XCoord = newX;
+			ZCoord = newZ;
+
+			GameObject Map = GameObject.FindWithTag ("Map");
+			Tiles [1] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord + 1);
+			Tiles [2] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord + 1);
+			Tiles [3] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord + 1, ZCoord + 1);
+			Tiles [4] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord);
+			Tiles [0] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord);
+			Tiles [5] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord + 1, ZCoord);
+			Tiles [6] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord - 1);
+			Tiles [7] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord - 1);
+			Tiles [8] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord + 1, ZCoord - 1);
+
+		}
 	}
 
 	// public "loadFromString" 
@@ -405,5 +432,9 @@ public class CityScript : MonoBehaviour {
 
 	public int getCurrentGold() {
 		return currentGold;
+	}
+
+	public GameObject getTileAtOrigin() {
+		return Tiles [0];
 	}
 }

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - CLI
   - Tile
+  - InputManager
+  - Map
   layers:
   - Default
   - TransparentFX
