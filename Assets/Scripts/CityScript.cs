@@ -101,7 +101,9 @@ public class CityScript : MonoBehaviour {
 		currentProd = 0;
 		currentGold = 0;
 		*/
-		NewCitizen ();
+		if (!useMap) {
+			NewCitizen ();
+		}
 		Debug.Log (Citizens[0].getPosition() + ", " + Citizens.Count);
 	}
 	
@@ -114,7 +116,8 @@ public class CityScript : MonoBehaviour {
 		if (XCoord == -1 && ZCoord == -1) {
 			XCoord = newX;
 			ZCoord = newZ;
-
+			establish ();
+			/*
 			GameObject Map = GameObject.FindWithTag ("Map");
 			Tiles [1] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord + 1);
 			Tiles [2] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord + 1);
@@ -125,8 +128,22 @@ public class CityScript : MonoBehaviour {
 			Tiles [6] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord - 1);
 			Tiles [7] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord - 1);
 			Tiles [8] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord + 1, ZCoord - 1);
-
+			*/
 		}
+	}
+
+	public void establish() {
+		GameObject Map = GameObject.FindWithTag ("Map");
+		Tiles [1] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord + 1);
+		Tiles [2] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord + 1);
+		Tiles [3] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord + 1, ZCoord + 1);
+		Tiles [4] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord);
+		Tiles [0] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord);
+		Tiles [5] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord + 1, ZCoord);
+		Tiles [6] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord - 1, ZCoord - 1);
+		Tiles [7] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord, ZCoord - 1);
+		Tiles [8] = Map.GetComponent<MapGenerationScript> ().getTileAt (XCoord + 1, ZCoord - 1);
+		NewCitizen ();
 	}
 
 	// public "loadFromString" 
@@ -299,8 +316,10 @@ public class CityScript : MonoBehaviour {
 
 		return done;
 	}
-
+		
 	public bool ReplaceStartOfQueue(string nameOfBuilding) { // returns "true" if the building name was successfully added to queue
+		//if (Queue.Count == 1) // for discussion later
+		//	
 		bool addedToQueue = false;
 		foreach (Property Build in PropertiesList.properties) {
 			if (Build.getName () == nameOfBuilding) {

@@ -8,6 +8,7 @@ TagManager:
   - Tile
   - InputManager
   - Map
+  - City
   layers:
   - Default
   - TransparentFX

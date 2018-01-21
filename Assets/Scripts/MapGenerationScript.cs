@@ -12,7 +12,9 @@ public class MapGenerationScript : MonoBehaviour {
 	private int curGenStep;
 	private float timeMax = 0.1f;
 	private float timeCur = 0.0f;
-	private bool activeGen;
+	private bool activeGen; // boolean for active generation of perlin-noise based map generation
+	private int genStage; // marker for the stage of development over time
+	private int cityX, cityZ; // co-ordinates for initial city
 
 	// private perlin noise map seeds
 	private float forestPerlinSeed;
@@ -40,6 +42,9 @@ public class MapGenerationScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		cityX = 5;//Random.Range (2, (int)xMax - 3);
+		cityZ = 4;//Random.Range (2, (int)zMax - 3);
+		Debug.Log ("City Co-Ords: " + cityX + "/" + cityZ +".");
 		tileList = new GameObject[(int) xMax, (int) zMax];
 		curGenStep = 0;
 		activeGen = true;
@@ -49,19 +54,27 @@ public class MapGenerationScript : MonoBehaviour {
 		ariaPerlinSeed = Random.Range (0, 1500);
 		minePerlinSeed = Random.Range (0, 1500);
 		//GenerateNoiseMap ();
+
+		genStage = 0;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		timeCur += Time.deltaTime;
-		if (timeCur > timeMax && activeGen) {
-			timeCur -= timeMax;
-			GenerateNoiseSegment (curGenStep, maxGenSteps);
-			curGenStep += maxGenSteps;
-			if (curGenStep >= (xMax * zMax)) {
-				activeGen = false;
+		if (genStage == 0) {
+			timeCur += Time.deltaTime;
+			if (timeCur > timeMax && activeGen) {
+				timeCur -= timeMax;
+				GenerateNoiseSegment (curGenStep, maxGenSteps);
+				curGenStep += maxGenSteps;
+				if (curGenStep >= (xMax * zMax)) {
+					activeGen = false;
+					genStage = 1;
+				}
+				//Debug.Log ("step: " + curGenStep + " ; zM*xM: " + (zMax * xMax) + " ; ");
 			}
-			//Debug.Log ("step: " + curGenStep + " ; zM*xM: " + (zMax * xMax) + " ; ");
+		} else if (genStage == 1) {
+			genStage = 2;
+			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity ();
 		}
 	}
 
@@ -84,6 +97,7 @@ public class MapGenerationScript : MonoBehaviour {
 
 	// Perlin Noise Segment-based generation
 	void GenerateNoiseSegment (int startInt, int maxSteps) {
+		//Debug.Log (tileList.ToString ());
 		float widthCount = baseTile.transform.lossyScale.x;
 		float lengthCount = baseTile.transform.lossyScale.z;
 
@@ -103,11 +117,15 @@ public class MapGenerationScript : MonoBehaviour {
 				var tPerlin = Mathf.PerlinNoise (forestPerlinSeed + xCount / noiseX, forestPerlinSeed + zCount / noiseZ);
 				var aPerlin = Mathf.PerlinNoise (ariaPerlinSeed + xCount / noiseX, ariaPerlinSeed + zCount / noiseZ);
 				var mPerlin = Mathf.PerlinNoise (minePerlinSeed + xCount / noiseX, minePerlinSeed + zCount / noiseZ);
-				T = (GameObject) Instantiate (baseTile, 
+				//T = (GameObject) Instantiate (baseTile, 
+				//	new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
+				//	Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
+				//T.GetComponent<Material> ().SetColor("ColourGrad:" + perlin, Color.Lerp (Color.green, Color.gray, perlin));
+				//tileList [(int)xCount, (int)zCount] = T;
+
+				tileList [(int)xCount, (int)zCount] = (GameObject) Instantiate (baseTile, 
 					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
 					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
-				//T.GetComponent<Material> ().SetColor("ColourGrad:" + perlin, Color.Lerp (Color.green, Color.gray, perlin));
-				tileList [(int)xCount, (int)zCount] = T;
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
 				//tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));
 				//int foodPerlin = (int) Mathf.Lerp(1.0f, 5.0f, hPerlin);
@@ -115,11 +133,21 @@ public class MapGenerationScript : MonoBehaviour {
 				//int goldPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
 				//int maxTreePerlin = (int)Mathf.Lerp (0.0f, 4.0f, hPerlin);
 				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
+				//Debug.Log (tileList [(int)xCount, (int)zCount].ToString ());
+				//if ((int) xCount == cityX && (int) zCount == cityZ) {
+				//	tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().createCity ();
+				//	Debug.Log ("City Founded!");
+				//}
+
+
 				zCount += 1.0f;
 				curStepCount++;
 				if (curStepCount >= maxSteps) {
 					break;
 				}
+
+
+				//Debug.Log (tileList.ToString ());
 			}
 			xCount += 1.0f;
 			curStepCount++;

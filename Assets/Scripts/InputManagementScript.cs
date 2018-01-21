@@ -48,6 +48,7 @@ public class InputManagementScript : MonoBehaviour {
 	// public methods
 	public void colonize(Vector3 position, int XCoord, int ZCoord) {
 		GameObject newCity = Instantiate (City, position, Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
+		Debug.Log ("City Instantiated");
 		newCity.GetComponent<CityScript> ().setCoordinates (XCoord, ZCoord);
 	}
 

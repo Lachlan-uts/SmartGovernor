@@ -11,6 +11,11 @@ public class GUIManager : MonoBehaviour {
 	private Camera MCamera;
 
 	[SerializeField]
+	private GameObject[] unitMenuActions;
+	[SerializeField]
+	private GameObject[] cityMenuActions;
+
+	[SerializeField]
 	private Text foodText;
 	[SerializeField]
 	private Text prodText;
@@ -26,6 +31,8 @@ public class GUIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		selectedObject = null;
+		setCityMenuStatus (false);
+		setUnitMenuStatus (false);
 	}
 	
 	// Update is called once per frame
@@ -135,6 +142,34 @@ public class GUIManager : MonoBehaviour {
 		if (selectedObject) {
 			if (selectedObject.CompareTag ("Tile")) {
 				selectedObject.GetComponent<TileScript> ().createCity ();
+			}
+		}
+	}
+
+	public void setCityMenuStatus(bool enabled) {
+		if (enabled) {
+			setUnitMenuStatus (false);
+
+			foreach (GameObject menuItem in cityMenuActions) {
+				menuItem.SetActive (true);
+			}
+		} else {
+			foreach (GameObject menuItem in cityMenuActions) {
+				menuItem.SetActive (false);
+			}
+		}
+	}
+
+	public void setUnitMenuStatus(bool enabled) {
+		if (enabled) {
+			setCityMenuStatus (false);
+
+			foreach (GameObject menuItem in unitMenuActions) {
+				menuItem.SetActive (true);
+			}
+		} else {
+			foreach (GameObject menuItem in unitMenuActions) {
+				menuItem.SetActive (false);
 			}
 		}
 	}
