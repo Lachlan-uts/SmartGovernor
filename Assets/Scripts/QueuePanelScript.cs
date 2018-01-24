@@ -51,6 +51,7 @@ public class QueuePanelScript : MonoBehaviour {
 				}
 			} else if (iLocalCounter > QueueList.Count - 1) {
 				// Removal of item, should only happen at the end of the queue, but easier/better to design for all cases
+				ItemsInQueue[iLocalCounter].GetComponent<QueuePanelItemScript>().DeleteSelf();
 				ItemsInQueue.RemoveAt(iLocalCounter);
 				iLocalCounter--;
 			} 

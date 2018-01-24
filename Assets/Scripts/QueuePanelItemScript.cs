@@ -26,4 +26,8 @@ public class QueuePanelItemScript : MonoBehaviour {
 	public string getItemName() {
 		return ItemName.text;
 	}
+
+	public void DeleteSelf() {
+		Destroy (this);
+	}
 }
