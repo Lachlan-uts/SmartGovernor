@@ -10,6 +10,7 @@ public class CLIScript : MonoBehaviour {
 	public GameObject City; // Used to select a particular city, for the moment only a singular city needs to be used
 	public InputField CLITextInput;
 	public Text CLITextOutput;
+	public GameObject QueuePanel; // Used to reference the queue, by default does nothing unless the queue panel is assigned
 
 
 	// Private variables
@@ -253,6 +254,10 @@ public class CLIScript : MonoBehaviour {
 			break;
 		}
 
+		if (QueuePanel != null) {
+			QueuePanel.GetComponent<QueuePanelScript> ().UpdateQueue ();
+		}
+
 		if (addToSS) {
 			SaveString = SaveString + ":" + InputCommand;
 		}
@@ -315,6 +320,10 @@ public class CLIScript : MonoBehaviour {
 			CLIStrings.Add ("Command: " + InputCommand);
 			addToSS = false;
 			break;
+		}
+
+		if (QueuePanel != null) {
+			QueuePanel.GetComponent<QueuePanelScript> ().UpdateQueue ();
 		}
 
 		if (addToSS) {

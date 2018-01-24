@@ -456,4 +456,12 @@ public class CityScript : MonoBehaviour {
 	public GameObject getTileAtOrigin() {
 		return Tiles [0];
 	}
+
+	public int getXCoord() {
+		return XCoord;
+	}
+
+	public int getZCoord() {
+		return ZCoord;
+	}
 }

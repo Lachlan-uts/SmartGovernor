@@ -122,22 +122,35 @@ public class MapGenerationScript : MonoBehaviour {
 				//	Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
 				//T.GetComponent<Material> ().SetColor("ColourGrad:" + perlin, Color.Lerp (Color.green, Color.gray, perlin));
 				//tileList [(int)xCount, (int)zCount] = T;
-
+				Debug.Log("Before: " + tileList);
+				/* // This causes issues further down the line
 				tileList [(int)xCount, (int)zCount] = (GameObject) Instantiate (baseTile, 
 					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
 					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
+				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
+				*/
+				// This does not cause issues further down the line
+				GameObject newTile = (GameObject) Instantiate (baseTile, 
+					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
+					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
+				newTile.name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
+				newTile.GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
+				tileList [(int)xCount, (int)zCount] = newTile;
+
+				Debug.Log ("After:  " + tileList);
 				//tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));
 				//int foodPerlin = (int) Mathf.Lerp(1.0f, 5.0f, hPerlin);
 				//int prodPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
 				//int goldPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
 				//int maxTreePerlin = (int)Mathf.Lerp (0.0f, 4.0f, hPerlin);
-				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
+
 				//Debug.Log (tileList [(int)xCount, (int)zCount].ToString ());
 				//if ((int) xCount == cityX && (int) zCount == cityZ) {
 				//	tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().createCity ();
 				//	Debug.Log ("City Founded!");
 				//}
+
 
 
 				zCount += 1.0f;

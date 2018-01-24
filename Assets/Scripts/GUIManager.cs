@@ -14,6 +14,10 @@ public class GUIManager : MonoBehaviour {
 	private GameObject[] unitMenuActions;
 	[SerializeField]
 	private GameObject[] cityMenuActions;
+	[SerializeField]
+	private GameObject CLIManagerRef; // hacky workaround for CLI, might be improved depending on need
+	[SerializeField]
+	private GameObject cityQueuePanel; // hacky workaroudn for the dynamic queue, might be improved later
 
 	[SerializeField]
 	private Text foodText;
@@ -26,7 +30,28 @@ public class GUIManager : MonoBehaviour {
 	[SerializeField]
 	private Text coordText;
 
+	// Setting up a theoretical event system based on whether this variable updates
 	private GameObject selectedObject;
+	public GameObject sObject {
+		get { return selectedObject; }
+		set {
+			if (selectedObject == value) {
+				return;
+			}
+			selectedObject = value;
+			if (selectedObject != null) {
+				switch (selectedObject.tag) {
+				case "City":
+					setCityMenuStatus (true);
+					CLIManagerRef.GetComponent<CLIScript> ().City = selectedObject;
+					break;
+				default:
+					disableMenus ();
+					break;
+				}
+			}
+		}
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -51,6 +76,13 @@ public class GUIManager : MonoBehaviour {
 				goldText.text = "" + hit.collider.GetComponent<TileScript> ().getGold ();
 				heightText.text = "" + hit.collider.GetComponent<TileScript> ().getHeight ();
 				coordText.text = hit.collider.GetComponent<TileScript> ().getXCoord () + "/" + hit.collider.GetComponent<TileScript> ().getZCoord ();
+			} else if (hit.collider.tag == "City") {
+				GameObject refTile = hit.collider.GetComponent<CityScript> ().getTileAtOrigin ();
+				foodText.text = "" + refTile.GetComponent<TileScript>().getFood();
+				prodText.text = "" + refTile.GetComponent<TileScript>().getProduction();
+				goldText.text = "" + refTile.GetComponent<TileScript>().getGold();
+				heightText.text = "" + refTile.GetComponent<TileScript>().getHeight();
+				coordText.text = "" + hit.collider.GetComponent<CityScript> ().getXCoord () + "/" + hit.collider.GetComponent<CityScript> ().getZCoord ();
 			} else {
 				foodText.text = "--";
 				prodText.text = "--";
@@ -69,11 +101,13 @@ public class GUIManager : MonoBehaviour {
 			switch (selectedObject.tag) {
 			case "City":
 				GameObject refTile = selectedObject.GetComponent<CityScript> ().getTileAtOrigin ();
-				foodText.text = "" + refTile.GetComponent<TileScript>().getFood();
-				prodText.text = "" + refTile.GetComponent<TileScript>().getProduction();
-				goldText.text = "" + refTile.GetComponent<TileScript>().getGold();
-				heightText.text = "" + refTile.GetComponent<TileScript>().getHeight();
-				coordText.text = "" + refTile.GetComponent<TileScript> ().getXCoord () + "/" + selectedObject.GetComponent<TileScript> ().getZCoord ();
+				foodText.text = "" + refTile.GetComponent<TileScript> ().getFood ();
+				prodText.text = "" + refTile.GetComponent<TileScript> ().getProduction ();
+				goldText.text = "" + refTile.GetComponent<TileScript> ().getGold ();
+				heightText.text = "" + refTile.GetComponent<TileScript> ().getHeight ();
+				coordText.text = "" + selectedObject.GetComponent<CityScript> ().getXCoord () + "/" + selectedObject.GetComponent<CityScript> ().getZCoord ();
+				cityQueuePanel.GetComponent<QueuePanelScript> ().CityRef = selectedObject;
+				cityQueuePanel.GetComponent<QueuePanelScript> ().UpdateQueue (); // Should be replaced by observable event system later
 				break;
 			case "Tile":
 				foodText.text = "" + selectedObject.GetComponent<TileScript>().getFood();
@@ -94,9 +128,9 @@ public class GUIManager : MonoBehaviour {
 
 		if (Input.GetButtonDown ("Fire1")) {
 			if (Physics.Raycast(cameraRay, out hit) && !selectedObject) {
-				selectedObject = hit.collider.gameObject;
+				sObject = hit.collider.gameObject;
 			} else {
-				selectedObject = null;
+				sObject = null;
 			}
 		}
 
@@ -172,6 +206,11 @@ public class GUIManager : MonoBehaviour {
 				menuItem.SetActive (false);
 			}
 		}
+	}
+
+	public void disableMenus() {
+		setUnitMenuStatus (false);
+		setCityMenuStatus (false);
 	}
 
 	// get methodology
