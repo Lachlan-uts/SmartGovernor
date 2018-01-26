@@ -1007,7 +1007,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ListElement: {fileID: 1333872982118494, guid: d2f7a16649247ba49bf9744728b16547,
     type: 2}
-  CityRef: {fileID: 0}
 --- !u!1 &704886788
 GameObject:
   m_ObjectHideFlags: 0

@@ -8,13 +8,26 @@ public class QueuePanelScript : MonoBehaviour {
 	[SerializeField]
 	private GameObject ListElement;
 
-	public GameObject CityRef; // Used to store the reference to the city whose queue is being viewed
+	private GameObject CityReference; // Used to store the reference to the city whose queue is being viewed
+	public GameObject CityRef {
+		get { return CityReference; }
+		set {
+			if (CityReference == value) {
+				return;
+			}
+			CityReference = value;
+			if (CityReference != null) {
+				UpdateQueue ();
+			}
 
-	private List<Property> LocalQueue; // Used to store equivalent data, ensures that the queue dynamically updates
+		}
+	}
+
+	private List<GameObject> LocalQueue; // Used to store the children of the QueuePanelList
 
 	// Use this for initialization
 	void Start () {
-		
+		LocalQueue = new List<GameObject> ();
 	}
 	
 	// Update is called once per frame
@@ -23,7 +36,7 @@ public class QueuePanelScript : MonoBehaviour {
 	}
 
 	public void UpdateQueue() {
-		List<Property> QueueList = CityRef.GetComponent<CityScript> ().getQueue ();
+		/*List<Property> QueueList = CityRef.GetComponent<CityScript> ().getQueue ();
 
 		List<Transform> ItemsInQueue = new List<Transform> ();
 
@@ -59,7 +72,36 @@ public class QueuePanelScript : MonoBehaviour {
 
 
 			iLocalCounter++;
+		}*/
+
+		List<Property> CityQueue = CityReference.GetComponent<CityScript> ().getQueue ();
+
+		Debug.Log ("CQC: " + CityQueue.Count + "; LQC: " + LocalQueue.Count);
+
+		int iLocalCounter = 0;
+		while (iLocalCounter < CityQueue.Count || iLocalCounter < LocalQueue.Count) {
+			if (iLocalCounter <= CityQueue.Count - 1) {
+				if (CityQueue.Count > LocalQueue.Count) { // Addition of Item to the Queue
+					GameObject newQueueItem = Instantiate (ListElement);
+					newQueueItem.gameObject.transform.SetParent (this.transform);
+					newQueueItem.GetComponent<QueuePanelItemScript> ().setItemName (CityQueue [iLocalCounter].getName ());
+					LocalQueue.Add (newQueueItem);
+				}
+				if (LocalQueue [iLocalCounter].GetComponent<QueuePanelItemScript> ().getItemName () != CityQueue [iLocalCounter].getName ()) {
+					// Renaming/Reallocation of Items in the Queue
+					LocalQueue[iLocalCounter].GetComponent<QueuePanelItemScript>().setItemName(CityQueue[iLocalCounter].getName());
+										
+				}
+			} else if (iLocalCounter > CityQueue.Count - 1) {
+				Destroy (LocalQueue [iLocalCounter]);
+				LocalQueue.RemoveAt (iLocalCounter);
+				iLocalCounter--;
+			}
+
+
+			iLocalCounter++;
 		}
+
 
 	}
 
