@@ -40,12 +40,27 @@ public class MapGenerationScript : MonoBehaviour {
 
 	private GameObject[,] tileList;
 
+	// influence map related calculation variables
+	private float[,] influenceBaseMap;
+	private float cityCenterInfluence = 2.0f; // City center influence
+	private float cityLocalInfluence = 1.0f; // City regional influence
+	private float unitInfluence = 5.0f; // Unit influence
+
+
 	// Use this for initialization
 	void Start () {
 		cityX = 5;//Random.Range (2, (int)xMax - 3);
 		cityZ = 4;//Random.Range (2, (int)zMax - 3);
 		Debug.Log ("City Co-Ords: " + cityX + "/" + cityZ +".");
 		tileList = new GameObject[(int) xMax, (int) zMax];
+
+		influenceBaseMap = new float[(int)xMax, (int)zMax];
+		for (int xCount = 0; xCount < (int)xMax; xCount++) {
+			for (int zCount = 0; zCount < (int)zMax; zCount++) {
+				influenceBaseMap [xCount, zCount] = 0.0f;
+			}
+		}
+
 		curGenStep = 0;
 		activeGen = true;
 		Random.InitState (randomSeed);
@@ -175,6 +190,57 @@ public class MapGenerationScript : MonoBehaviour {
 	// get methodology
 	public GameObject getTileAt(int XCoord, int ZCoord) {
 		return tileList [XCoord, ZCoord];
+	}
+
+
+	public void denoteCity(int xCoord, int zCoord, bool isPlayer) {
+		if (isPlayer) {
+			influenceBaseMap [xCoord, zCoord] += cityCenterInfluence;
+			influenceBaseMap [xCoord - 1, zCoord + 1] += cityLocalInfluence;
+			influenceBaseMap [xCoord, zCoord + 1] += cityLocalInfluence;
+			influenceBaseMap [xCoord + 1, zCoord + 1] += cityLocalInfluence;
+			influenceBaseMap [xCoord - 1, zCoord] += cityLocalInfluence;
+			influenceBaseMap [xCoord + 1, zCoord] += cityLocalInfluence;
+			influenceBaseMap [xCoord - 1, zCoord - 1] += cityLocalInfluence;
+			influenceBaseMap [xCoord, zCoord - 1] += cityLocalInfluence;
+			influenceBaseMap [xCoord + 1, zCoord - 1] += cityLocalInfluence;
+		} else {
+			influenceBaseMap [xCoord, zCoord] -= cityCenterInfluence;
+			influenceBaseMap [xCoord - 1, zCoord + 1] -= cityLocalInfluence;
+			influenceBaseMap [xCoord, zCoord + 1] -= cityLocalInfluence;
+			influenceBaseMap [xCoord + 1, zCoord + 1] -= cityLocalInfluence;
+			influenceBaseMap [xCoord - 1, zCoord] -= cityLocalInfluence;
+			influenceBaseMap [xCoord + 1, zCoord] -= cityLocalInfluence;
+			influenceBaseMap [xCoord - 1, zCoord - 1] -= cityLocalInfluence;
+			influenceBaseMap [xCoord, zCoord - 1] -= cityLocalInfluence;
+			influenceBaseMap [xCoord + 1, zCoord - 1] -= cityLocalInfluence;
+		}
+
+
+		float cityRadius = 3.0f; // the radius wherein the city can influence
+
+
+
+
+
+	}
+
+	public void captureCity(int xCoord, int zCoord, bool isPlayer) {
+		if (isPlayer) {
+			denoteCity (xCoord, zCoord, true);
+			denoteCity (xCoord, zCoord, true);
+		} else {
+			denoteCity (xCoord, zCoord, false);
+			denoteCity (xCoord, zCoord, false);
+		}
+	}
+
+	public float[,] getInfluenceMap() {
+		return influenceBaseMap;
+	}
+
+	public float[,] getInfluenceMap(int xCoord, int zCoord) {
+		return influenceBaseMap;
 	}
 
 }
