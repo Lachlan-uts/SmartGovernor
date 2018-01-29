@@ -188,10 +188,21 @@ public class MapGenerationScript : MonoBehaviour {
 	}
 
 	// get methodology
+	public GameObject[,] getWholeMap() {
+		return tileList;
+	}
+
 	public GameObject getTileAt(int XCoord, int ZCoord) {
 		return tileList [XCoord, ZCoord];
 	}
 
+	public int getXSize() {
+		return (int)xMax;
+	}
+
+	public int getZSize() {
+		return (int)zMax;
+	}
 
 	public void denoteCity(int xCoord, int zCoord, bool isPlayer) {
 		if (isPlayer) {
