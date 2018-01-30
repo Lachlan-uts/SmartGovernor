@@ -9,6 +9,7 @@ public class Property {
 	private int Value;
 	private int Cost;
 	private bool ImmediateUse;
+	private string unitName;
 
 	public Property() {
 		Name = "";
@@ -16,6 +17,7 @@ public class Property {
 		Value = 1;
 		Cost = 1;
 		ImmediateUse = false;
+		unitName = "";
 	}
 
 	public Property(string newName, string newOutput, int amount) {
@@ -24,6 +26,7 @@ public class Property {
 		Value = amount;
 		Cost = 1;
 		ImmediateUse = false;
+		unitName = "";
 	}
 
 	public Property(string newName, string newOutput, int amount, int newCost) {
@@ -32,6 +35,7 @@ public class Property {
 		Value = amount;
 		Cost = newCost;
 		ImmediateUse = false;
+		unitName = "";
 	}
 
 	public Property(string newName, string newOutput, int amount, int newCost, bool use) {
@@ -40,6 +44,16 @@ public class Property {
 		Value = amount;
 		Cost = newCost;
 		ImmediateUse = use;
+		unitName = "";
+	}
+
+	public Property(string newName, string newOutput, int amount, int newCost, string unit) {
+		Name = newName;
+		Output = newOutput;
+		Value = amount;
+		Cost = newCost;
+		ImmediateUse = true;
+		unitName = unit;
 	}
 
 	public string getName() {
@@ -60,5 +74,9 @@ public class Property {
 
 	public bool getUse() {
 		return ImmediateUse;
+	}
+
+	public string getUnitName() {
+		return unitName;
 	}
 }

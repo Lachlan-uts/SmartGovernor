@@ -29,6 +29,8 @@ public class CityScript : MonoBehaviour {
 	private List<Property> Buildings;
 	private List<Property> Queue;
 
+	private bool ownership; // Who owns this? By default, true refers to the player
+
 
 	private int randomSeed = 10; //For purposes of consistency in testing the AI
 
@@ -58,12 +60,14 @@ public class CityScript : MonoBehaviour {
 				//	+ Tile.GetComponent<TileScript>().getGold());
 				Tiles [i] = Tile;
 			}
+			ownership = true;
 		} else {
 			Citizens = new List<Citizen> ();
 			Buildings = new List<Property> ();
 			Queue = new List<Property> ();
 			Queue.Add (PropertiesList.getList () [0]);
 			Tiles = new GameObject[9];
+			ownership = true;
 		}
 		// Placeholder
 
@@ -110,6 +114,10 @@ public class CityScript : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		
+	}
+
+	public void changeOwnership() {
+		ownership = !ownership;
 	}
 
 	public void setCoordinates(int newX, int newZ) {
@@ -250,8 +258,13 @@ public class CityScript : MonoBehaviour {
 		if (!Build.getUse ()) {
 			Buildings.Add (Build);
 		} else { // Since this can currently only be used for "coinage", might as well put in the gold until we better develop this
-			currentGold += (int) ((1.0 * currentProd) / 2.0);
-			currentProd = 0;
+			if (Build.getUnitName() == "") {
+				currentGold += (int)((1.0 * currentProd) / 2.0);
+				currentProd = 0;
+			} else {
+				GameObject newUnit = Resources.Load<GameObject> (Build.getUnitName());
+				Instantiate (newUnit, this.transform);
+			}
 		}
 	}
 

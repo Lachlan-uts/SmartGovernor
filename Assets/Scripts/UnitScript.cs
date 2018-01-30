@@ -24,22 +24,23 @@ public class UnitScript : MonoBehaviour {
 		
 	}
 
-	private void setCoords(int newX, int newZ) {
+	public void setCoords(int newX, int newZ) {
 		xCoord = newX;
 		zCoord = newZ;
 	}
 
-	private void pathfind(int goalXCoord, int goalZCoord) {
+	private List<GameObject> pathfind(int goalXCoord, int goalZCoord) {
 		GameObject Map = GameObject.FindGameObjectWithTag ("Map");
 		List<GameObject> closedSet = new List<GameObject> ();
 
 		List<GameObject> openSet = new List<GameObject> ();
 		openSet.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (xCoord, zCoord));
 
-		// Setup the cameFrom list here
-
 		int xSize = Map.GetComponent<MapGenerationScript> ().getXSize ();
 		int zSize = Map.GetComponent<MapGenerationScript> ().getZSize ();
+
+		// Setup the cameFrom list here
+		GameObject[,] cameFromList = new GameObject[xSize, zSize];
 
 		int[,] pScore = new int[xSize, zSize];
 		for (int xCount = 0; xCount < xSize; xCount++) {
@@ -58,10 +59,30 @@ public class UnitScript : MonoBehaviour {
 			}
 		}
 
-		cScore [xCoord, zCoord] = heuristicCostEstimate(xCoord, zCoord); // Estimated cost of getting to the goal
+		cScore [xCoord, zCoord] = heuristicCostEstimate(xCoord, zCoord, goalXCoord, goalZCoord); // Estimated cost of getting to the goal
 
 		while (openSet.Count != 0) {
-			GameObject current = openSet[0]; // Need to change this such that the algorithm grabs the tile with the lowest cScore assosciated
+			 // Need to change this such that the algorithm grabs the tile with the lowest cScore assosciated
+
+			int lowestCScorePos = 0;
+			for (int LCSCount = 1; LCSCount < openSet.Count - 1; LCSCount++) { // No need to compare the first openSet item to itself
+				int lowX = openSet [lowestCScorePos].GetComponent<TileScript> ().getXCoord();
+				int lowZ = openSet [lowestCScorePos].GetComponent<TileScript> ().getZCoord ();
+				int comX = openSet [LCSCount].GetComponent<TileScript> ().getXCoord ();
+				int comZ = openSet [LCSCount].GetComponent<TileScript> ().getZCoord ();
+				if (cScore [lowX, lowZ] > cScore [comX, comZ]) {
+					lowestCScorePos = LCSCount;
+				}
+			}
+
+			GameObject current = openSet[lowestCScorePos];
+
+			int curX = current.GetComponent<TileScript> ().getXCoord ();
+			int curZ = current.GetComponent<TileScript> ().getZCoord ();
+			if (curX == goalXCoord && curZ == goalZCoord) {
+				// Return a reconstructed path based upon the cameFromList
+				return reconstructPath(cameFromList, current);
+			}
 
 			closedSet.Add (current);
 			openSet.Remove (current);
@@ -103,14 +124,33 @@ public class UnitScript : MonoBehaviour {
 				}
 
 				// Continue the neighbour chain logic here
+				// cameFrom list here
+				cameFromList[neighbour.GetComponent<TileScript>().getXCoord(), neighbour.GetComponent<TileScript>().getZCoord()] = current;
+				pScore[neighbour.GetComponent<TileScript>().getXCoord(), neighbour.GetComponent<TileScript>().getZCoord()] = tentativeCScore;
+				cScore [neighbour.GetComponent<TileScript> ().getXCoord (), neighbour.GetComponent<TileScript> ().getZCoord ()] 
+				= pScore [neighbour.GetComponent<TileScript> ().getXCoord (), neighbour.GetComponent<TileScript> ().getZCoord ()]
+				+ heuristicCostEstimate (neighbour.GetComponent<TileScript> ().getXCoord (), neighbour.GetComponent<TileScript> ().getZCoord (),
+					goalXCoord, goalZCoord);
 
 			}
 
 		}
 
+		return null;
+
 	}
 
+	private List<GameObject> reconstructPath(GameObject[,] cameFromList, GameObject current) {
+		GameObject tCurrent = current;
+		List<GameObject> totalPath = new List<GameObject> ();
+		totalPath.Add (tCurrent);
+		while (arrayContains (cameFromList, tCurrent)) {
+			tCurrent = cameFromList [tCurrent.GetComponent<TileScript> ().getXCoord (), tCurrent.GetComponent<TileScript> ().getZCoord ()];
+			totalPath.Add (tCurrent);
+		}
 
+		return totalPath;
+	}
 
 	private int heuristicCostEstimate(int tileXCoord, int tileZCoord) {
 		int HCE = 0;
@@ -123,4 +163,38 @@ public class UnitScript : MonoBehaviour {
 		return HCE;
 	}
 
+	private int heuristicCostEstimate(int tileXCoord, int tileZCoord, int goalXCoord, int goalZCoord) {
+		int HCE = 0;
+
+		int MovementCostToTile = Mathf.Abs (xCoord - tileXCoord) + Mathf.Abs (zCoord - tileZCoord);
+
+		int MovementCostToGoal = Mathf.Abs (goalXCoord - tileXCoord) + Mathf.Abs (goalZCoord - tileZCoord);
+
+		HCE = MovementCostToTile + MovementCostToGoal;
+		return HCE;
+	}
+
+	private bool arrayContains(GameObject[,] Array, GameObject Item) {
+		for (int xCount = 0; xCount < Array.GetLength (0); xCount++) {
+			for (int zCount = 0; zCount < Array.GetLength (1); zCount++) {
+				if (Item.Equals (Array [xCount, zCount])) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+
+	public void moveTo(int newX, int newZ) {
+		TileList = pathfind (newX, newZ);
+		string debugString = "";
+		if (TileList != null) {
+			foreach (GameObject Tile in TileList) {
+				debugString = debugString + "(" + Tile.GetComponent<TileScript> ().getXCoord () + "," + Tile.GetComponent<TileScript> ().getZCoord () + "),";
+			}
+		}
+		Debug.Log (debugString);
+
+	}
 }
