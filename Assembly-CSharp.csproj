@@ -54,6 +54,8 @@
      <Compile Include="Assets\Scripts\Citizen.cs" />
      <Compile Include="Assets\Scripts\CityScript.cs" />
      <Compile Include="Assets\Scripts\CLIScript.cs" />
+     <Compile Include="Assets\Scripts\FactionScript.cs" />
+     <Compile Include="Assets\Scripts\GameManagerScript.cs" />
      <Compile Include="Assets\Scripts\GUIManager.cs" />
      <Compile Include="Assets\Scripts\InputManagementScript.cs" />
      <Compile Include="Assets\Scripts\MapGenerationScript.cs" />

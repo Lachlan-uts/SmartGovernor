@@ -76,6 +76,7 @@ public class UnitScript : MonoBehaviour {
 			}
 
 			GameObject current = openSet[lowestCScorePos];
+			Debug.Log (current.GetComponent<TileScript> ().getXCoord () + "," + current.GetComponent<TileScript> ().getZCoord ());
 
 			int curX = current.GetComponent<TileScript> ().getXCoord ();
 			int curZ = current.GetComponent<TileScript> ().getZCoord ();
@@ -187,6 +188,7 @@ public class UnitScript : MonoBehaviour {
 	}
 
 	public void moveTo(int newX, int newZ) {
+		Debug.Log ("Acting on order");
 		TileList = pathfind (newX, newZ);
 		string debugString = "";
 		if (TileList != null) {

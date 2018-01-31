@@ -138,6 +138,14 @@ public class TileScript : MonoBehaviour {
 		}
 	}
 
+	public void createCity(bool ownership) {
+		if (!hasCity) {
+			hasCity = true;
+			// Code to create a city on this tile
+			GameObject.FindWithTag("InputManager").GetComponent<InputManagementScript>().colonize(transform.position, XCoord, ZCoord, ownership);
+		}
+	}
+
 	// get methodology
 	public int getFood() {
 		return Food;

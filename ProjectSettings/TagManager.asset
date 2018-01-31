@@ -9,6 +9,9 @@ TagManager:
   - InputManager
   - Map
   - City
+  - GUI
+  - Faction
+  - Unit
   layers:
   - Default
   - TransparentFX

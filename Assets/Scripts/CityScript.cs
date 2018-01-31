@@ -477,4 +477,8 @@ public class CityScript : MonoBehaviour {
 	public int getZCoord() {
 		return ZCoord;
 	}
+
+	public bool getOwnership() {
+		return ownership;
+	}
 }

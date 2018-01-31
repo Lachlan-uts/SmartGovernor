@@ -15,6 +15,7 @@ public class MapGenerationScript : MonoBehaviour {
 	private bool activeGen; // boolean for active generation of perlin-noise based map generation
 	private int genStage; // marker for the stage of development over time
 	private int cityX, cityZ; // co-ordinates for initial city
+	private int enemyX, enemyZ; // co-ordinates for initial enemy city
 
 	// private perlin noise map seeds
 	private float forestPerlinSeed;
@@ -51,6 +52,8 @@ public class MapGenerationScript : MonoBehaviour {
 	void Start () {
 		cityX = 5;//Random.Range (2, (int)xMax - 3);
 		cityZ = 4;//Random.Range (2, (int)zMax - 3);
+		enemyX = 24;
+		enemyZ = 22;
 		Debug.Log ("City Co-Ords: " + cityX + "/" + cityZ +".");
 		tileList = new GameObject[(int) xMax, (int) zMax];
 
@@ -89,7 +92,8 @@ public class MapGenerationScript : MonoBehaviour {
 			}
 		} else if (genStage == 1) {
 			genStage = 2;
-			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity ();
+			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity (true);
+			tileList [enemyX, enemyZ].GetComponent<TileScript> ().createCity (false);
 		}
 	}
 

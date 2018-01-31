@@ -134,6 +134,20 @@ public class GUIManager : MonoBehaviour {
 			}
 		}
 
+		if (Input.GetButtonDown ("Fire2")) {
+			if (Physics.Raycast(cameraRay, out hit) && selectedObject) {
+				Debug.Log ("Order Recieved...?");
+				if (selectedObject.tag == "Unit") {
+					Debug.Log ("Order Recieved?");
+					if (hit.collider.tag == "Tile") {
+						Debug.Log ("Order Recieved!");
+						selectedObject.GetComponent<UnitScript> ().moveTo (hit.collider.GetComponent<TileScript> ().getXCoord (), 
+							hit.collider.GetComponent<TileScript> ().getZCoord ());
+					}
+				}
+			}
+		}
+
 		/*
 		// Food Text Management
 		if (foodNumber == null) {
