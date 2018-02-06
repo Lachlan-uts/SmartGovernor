@@ -57,12 +57,14 @@
      <Compile Include="Assets\Scripts\GUIManager.cs" />
      <Compile Include="Assets\Scripts\InputManagementScript.cs" />
      <Compile Include="Assets\Scripts\MapGenerationScript.cs" />
+     <Compile Include="Assets\Scripts\MapGenerationScriptv2.cs" />
      <Compile Include="Assets\Scripts\PropertiesList.cs" />
      <Compile Include="Assets\Scripts\Property.cs" />
      <Compile Include="Assets\Scripts\QueuePanelItemScript.cs" />
      <Compile Include="Assets\Scripts\QueuePanelScript.cs" />
      <Compile Include="Assets\Scripts\ResourceScript.cs" />
      <Compile Include="Assets\Scripts\TileScript.cs" />
+     <Compile Include="Assets\Scripts\TileScriptv2.cs" />
      <Compile Include="Assets\Scripts\UnitActions.cs" />
      <None Include="Assets\Resources\test.txt" />
  <Reference Include="UnityEngine.UI">
