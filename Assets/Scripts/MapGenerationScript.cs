@@ -128,30 +128,28 @@ public class MapGenerationScript : MonoBehaviour {
 
 		while (xCount < xMax) {
 			while (zCount < zMax) {
+				//Only one which actually affects tile generation.
 				var hPerlin = Mathf.PerlinNoise (heightPerlinSeed + xCount / noiseX, heightPerlinSeed + zCount / noiseZ);
 				var tPerlin = Mathf.PerlinNoise (forestPerlinSeed + xCount / noiseX, forestPerlinSeed + zCount / noiseZ);
 				var aPerlin = Mathf.PerlinNoise (ariaPerlinSeed + xCount / noiseX, ariaPerlinSeed + zCount / noiseZ);
 				var mPerlin = Mathf.PerlinNoise (minePerlinSeed + xCount / noiseX, minePerlinSeed + zCount / noiseZ);
-				//T = (GameObject) Instantiate (baseTile, 
-				//	new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
-				//	Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
-				//T.GetComponent<Material> ().SetColor("ColourGrad:" + perlin, Color.Lerp (Color.green, Color.gray, perlin));
-				//tileList [(int)xCount, (int)zCount] = T;
 				Debug.Log("Before: " + tileList);
-				/* // This causes issues further down the line
-				tileList [(int)xCount, (int)zCount] = (GameObject) Instantiate (baseTile, 
-					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
-					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
+
+				//New method which works
+				Vector3 pos = new Vector3(xCount,0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f),zCount);
+				tileList [(int)xCount, (int)zCount] = Instantiate (Resources.Load ("TestTile"), pos, Quaternion.identity, transform) as GameObject;
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
-				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
-				*/
-				// This does not cause issues further down the line
-				GameObject newTile = (GameObject) Instantiate (baseTile, 
-					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
-					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
-				newTile.name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
-				newTile.GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
-				tileList [(int)xCount, (int)zCount] = newTile;
+
+				//Old method which doesn't
+//				GameObject newTile = (GameObject) Instantiate (baseTile, 
+//					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
+//					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
+//
+//
+//				newTile.name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
+//
+//				newTile.GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
+//				tileList [(int)xCount, (int)zCount] = newTile;
 
 				Debug.Log ("After:  " + tileList);
 				//tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));

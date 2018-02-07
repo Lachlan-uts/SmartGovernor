@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class MapGenerationScriptv2 : MonoBehaviour {
 
-	public Transform TestTile;
-
-	//public GameObject TestTile;
-
-	private GameObject[,] tiles;
-
-	private GameObject testTile;
-
 	[SerializeField]
 	private int xLength;
 	[SerializeField]
 	private int zLength;
 
-
+	//The array of tiles.
+	private GameObject[,] tiles;
 
 	// Use this for initialization
 	void Start () {

@@ -41,9 +41,12 @@ public class TileScriptv2 : MonoBehaviour {
 	}
 
 	void Start () {
-		XCoord = 0;
-		ZCoord = 0;
+		XCoord = (int)Mathf.CeilToInt(transform.position.x);
+		ZCoord = (int)Mathf.CeilToInt(transform.position.z);
 		height = 0.0f;
+		MapGenerationScriptv2 map = GetComponentInParent<MapGenerationScriptv2> ();
+		GameObject Tile = map.getTile (XCoord, ZCoord);
+		Debug.Log ("Tile " + name + " is at " + Tile.GetComponent<TileScriptv2>().getXCoord());
 	}
 
 	void Start (int xCoord, int zCoord, float height, int rndSeed) {
@@ -61,7 +64,7 @@ public class TileScriptv2 : MonoBehaviour {
 //	// MouseOverFunctions
 //
 	void OnMouseOver() {
-		Debug.Log ("Tile:" + name + "Position:" + transform.position.ToString() + "parent's array: " + GetComponentInParent<GameObject>());
+		Debug.Log ("Tile:" + name + "Position:" + transform.position.ToString() + "parent's array: ");
 
 	}
 //
@@ -155,11 +158,11 @@ public class TileScriptv2 : MonoBehaviour {
 //		return height;
 //	}
 //
-//	public int getXCoord() {
-//		return XCoord;
-//	}
-//
-//	public int getZCoord() {
-//		return ZCoord;
-//	}
+	public int getXCoord() {
+		return XCoord;
+	}
+
+	public int getZCoord() {
+		return ZCoord;
+	}
 }
