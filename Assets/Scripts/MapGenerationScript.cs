@@ -89,7 +89,7 @@ public class MapGenerationScript : MonoBehaviour {
 			}
 		} else if (genStage == 1) {
 			genStage = 2;
-			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity ();
+			tileList [cityX, cityZ].GetComponent<TileScriptv2> ().createCity ();
 		}
 	}
 
@@ -139,6 +139,7 @@ public class MapGenerationScript : MonoBehaviour {
 				Vector3 pos = new Vector3(xCount,0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f),zCount);
 				tileList [(int)xCount, (int)zCount] = Instantiate (Resources.Load ("TestTile"), pos, Quaternion.identity, transform) as GameObject;
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
+				tileList [(int)xCount, (int)zCount].GetComponent<TileScriptv2> ().SetStatistics (tPerlin,aPerlin,mPerlin);
 
 				//Old method which doesn't
 //				GameObject newTile = (GameObject) Instantiate (baseTile, 

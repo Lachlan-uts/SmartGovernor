@@ -151,7 +151,7 @@ public class TileScript : MonoBehaviour {
 		return Gold;
 	}
 
-	public float getHeight() {
+	public float getYCoord() {
 		return height;
 	}
 
