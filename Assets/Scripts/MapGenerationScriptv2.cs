@@ -26,8 +26,8 @@ public class MapGenerationScriptv2 : MonoBehaviour {
 
 		for (int x = 0; x < xLength; x++) {
 			for (int z= 0; z < zLength; z++) {
-				Vector3 pos = new Vector3 (x, 4, z) * 2.0f;
-				tiles[x,z] = Instantiate(Resources.Load("TestTile"), pos, Quaternion.identity) as GameObject;
+				Vector3 pos = new Vector3 (x, 4, z);
+				tiles[x,z] = Instantiate(Resources.Load("TestTile"), pos, Quaternion.identity, transform) as GameObject;
 			}
 		}
 		

@@ -61,7 +61,7 @@ public class TileScriptv2 : MonoBehaviour {
 //	// MouseOverFunctions
 //
 	void OnMouseOver() {
-		Debug.Log ("Tile:" + name + "Position:" + transform.position.ToString());
+		Debug.Log ("Tile:" + name + "Position:" + transform.position.ToString() + "parent's array: " + GetComponentInParent<GameObject>());
 
 	}
 //
