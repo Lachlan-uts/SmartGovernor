@@ -31,25 +31,9 @@ public class TileScriptv2 : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
-//		hasCity = false;
-//		if (randomGen) {
-//			height = 0.0f;
-//			Food = Random.Range (1, 6);
-//			Production = Random.Range (1, 8);
-//			Gold = Random.Range (2, 5);
-//			Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold + "; TV:" + (Food + Production + Gold));
-//		} else {
-//			foreach (GameObject Tree in Trees) {
-//				Tree.SetActive (false);
-//			}
-//			height = 0.0f;
-//		}
 	}
 
 	void Start () {
-//		MapGenerationScriptv2 map = GetComponentInParent<MapGenerationScriptv2> ();
-//		GameObject Tile = map.getTile (XCoord, ZCoord);
-//		Debug.Log ("Tile " + name + " is at " + Tile.GetComponent<TileScriptv2>().getXCoord());
 	}
 		
 	// Update is called once per frame
@@ -64,27 +48,7 @@ public class TileScriptv2 : MonoBehaviour {
 		Debug.Log ("Tile:" + name + "; F:" + Food + "; P:" + Production + "; G:" + Gold);
 
 	}
-//
-//	// public methods
-//	public void SetResources(int newFood, int newProd, int newGold, int maxTreeCount) {
-//		if (!randomGen && canSet) {
-//			int treeCount = 0;
-//			Food = newFood;
-//			Production = newProd;
-//			Gold = newGold;
-//			//Random.InitState (randomSeed);
-//			foreach (GameObject Tree in Trees) {
-//				if (Random.Range (0.0f, 10.0f) > 5.0f && treeCount < maxTreeCount) {
-//					Tree.SetActive (true);
-//					treeCount++;
-//				}
-//			}
-//			Debug.Log ("Trees Done");
-//			Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold + "; TV:" + (Food + Production + Gold));
-//			randomGen = true;
-//		}
-//	}
-//
+		
 	public void SetStatistics(float forestPerlin, float ariaPerlin, float minePerlin) {
 		if (!randomGen && canSet) {
 			int numTrees = 4;
@@ -124,7 +88,7 @@ public class TileScriptv2 : MonoBehaviour {
 //		int.TryParse (TileParams [2], out Gold);
 //		Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold + "; TV:" + (Food + Production + Gold));
 //	}
-//
+
 	public void createCity() {
 		if (!hasCity) {
 			hasCity = true;
@@ -132,7 +96,7 @@ public class TileScriptv2 : MonoBehaviour {
 			GameObject.FindWithTag("InputManager").GetComponent<InputManagementScript>().colonize(transform.position, getXCoord(), getZCoord());
 		}
 	}
-//
+
 	// get methodology
 	public int getFood() {
 		return Food;
