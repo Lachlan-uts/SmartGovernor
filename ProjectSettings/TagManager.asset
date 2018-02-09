@@ -9,6 +9,7 @@ TagManager:
   - InputManager
   - Map
   - City
+  - Citizen
   layers:
   - Default
   - TransparentFX
