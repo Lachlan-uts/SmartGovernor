@@ -2,12 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ResourceScript : MonoBehaviour {
+public class Resource {
 
 	// Note: This will be an abstract resource class for allowing consistent method access and definition
-	[SerializeField]
-	private string Name = "Nothing!";
-	private int Value = 0;
+	private string Name;
+	private int Value;
+
+	public Resource() {
+		Name = "Nothing!";
+		Value = 0;
+	}
+
+	public Resource(string name) {
+		Name = name;
+		Value = 0;
+	}
+
+	public Resource(string name, int value) {
+		Name = name;
+		Value = value;
+	}
 
 	public string getName() {
 		return Name;
@@ -21,7 +35,7 @@ public class ResourceScript : MonoBehaviour {
 		Name = newName;
 	}
 
-	public void setName(int newValue) {
+	public void setValue(int newValue) {
 		Value = newValue;
 	}
 }

@@ -19,6 +19,8 @@ GameObject:
   serializedVersion: 5
   m_Component:
   - component: {fileID: 4046928499291268}
+  - component: {fileID: 65202616074615470}
+  - component: {fileID: 114665315385983020}
   m_Layer: 0
   m_Name: Citizen
   m_TagString: Citizen
@@ -111,3 +113,26 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1959638860333056}
   m_Mesh: {fileID: 4300000, guid: d0b623412d118434eba20d35b4e3c7d4, type: 3}
+--- !u!65 &65202616074615470
+BoxCollider:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1746536950518856}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 1}
+  m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114665315385983020
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1746536950518856}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac5249ab87502374b9bce7ef170f1af0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

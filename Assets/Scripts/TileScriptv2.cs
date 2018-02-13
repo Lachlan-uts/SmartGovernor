@@ -12,6 +12,9 @@ public class TileScriptv2 : MonoBehaviour {
 	private float FoodUpper = 4.0f;
 
 
+	//Resource Storage for realsies
+	private Dictionary<string,Resource> Resources;
+
 	// Resource Storage
 	private int Food;
 	private int Production;
@@ -31,6 +34,10 @@ public class TileScriptv2 : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		Resources = new Dictionary<string, Resource> ();
+		Resources.Add ("Food", new Resource ("Food"));
+		Resources.Add ("Production", new Resource ("Production"));
+		Resources.Add ("Gold", new Resource ("Gold"));
 	}
 
 	void Start () {
@@ -57,12 +64,16 @@ public class TileScriptv2 : MonoBehaviour {
 //			}
 			// Food deterministic algorithm
 			Food = (int) (Mathf.Lerp (FoodLower, FoodUpper, ariaPerlin) + (0.5f * numTrees));
+			Resources ["Food"].setValue ((int)(Mathf.Lerp (FoodLower, FoodUpper, ariaPerlin) + (0.5f * numTrees)));
 			// Production deterministic algorithm
 			Production = (int) (Mathf.Lerp(1.0f, 6.0f, getYCoord()) + Mathf.Lerp(0.0f, 4.0f, minePerlin) + (0.5f * numTrees));
+			Resources ["Production"].setValue ((int)(Mathf.Lerp (1.0f, 6.0f, getYCoord ()) + Mathf.Lerp (0.0f, 4.0f, minePerlin) + (0.5f * numTrees)));
 			// Gold deterministic algorithm
 			Gold = (int) (GoldTop - (Mathf.Lerp(0.0f, 4.0f, minePerlin) + numTrees));
+			Resources ["Gold"].setValue ((int)(GoldTop - (Mathf.Lerp (0.0f, 4.0f, minePerlin) + numTrees)));
 			if (Gold <= 0) {
 				Gold = 0;
+				Resources ["Gold"].setValue (0);
 			}
 
 //			// While loop for turning "trees" "on"
@@ -108,6 +119,18 @@ public class TileScriptv2 : MonoBehaviour {
 
 	public int getGold() {
 		return Gold;
+	}
+
+	//Painful hack that makes me cry but will suffice for now due to how poorly we've been storing resources.
+
+	//Actually nvm going to do it "right" regardless because I can't help myself <-- this may actually be overkill
+	public Resource getResource(string resourceName) {
+		return Resources[resourceName];
+	}
+
+
+	public int getTileValue() {
+		return getFood () + getProduction () + getGold ();
 	}
 
 	public int getXCoord() {

@@ -52,7 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4062480675044950}
   - component: {fileID: 65162078168870740}
-  - component: {fileID: 114854769963938582}
+  - component: {fileID: 114509631673533240}
   m_Layer: 0
   m_Name: City
   m_TagString: City
@@ -154,7 +154,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1, z: 2}
   m_Center: {x: 0, y: 0.5, z: 0}
---- !u!114 &114854769963938582
+--- !u!114 &114509631673533240
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -162,7 +162,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1622012745668006}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a477e5d18ff97214caf363a2546e61f5, type: 3}
+  m_Script: {fileID: 11500000, guid: bbfa876212bff8f418fee06bcd63685d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   useMap: 1

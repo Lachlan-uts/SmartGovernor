@@ -182,9 +182,27 @@ public class MapGenerationScript : MonoBehaviour {
 				break;
 			}
 		}
-
-
 	}
+
+	//Quick way of getting all the tiles a city has access to.
+	public List<GameObject> getSquareRadius(GameObject centerTile, int radius) {
+		List<GameObject> tiles = new List<GameObject> ();
+		int initialX = centerTile.GetComponent<TileScriptv2> ().getXCoord ();
+		int initialZ = centerTile.GetComponent<TileScriptv2> ().getZCoord ();
+		for (int x = (initialX - radius); x <= (initialX + radius); x++) {
+			for (int z = (initialZ - radius); z <= (initialZ + radius); z++) {
+				tiles.Add(getTileAt(x,z));
+			}
+		}
+		//remove the city tile itself from the list
+		tiles.Remove(centerTile);
+		return tiles;
+	}
+
+
+	//This is an ideal solution, in the short run I'll use a simpler system I've decided <-- Overkill currently. Stretch Goal.
+//	public GameObject[,] aStarCalculation() {
+//	}
 
 	// get methodology
 	public GameObject getTileAt(int XCoord, int ZCoord) {

@@ -52,7 +52,9 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Citizen.cs" />
+     <Compile Include="Assets\Scripts\CitizenScript.cs" />
      <Compile Include="Assets\Scripts\CityScript.cs" />
+     <Compile Include="Assets\Scripts\CityScriptv2.cs" />
      <Compile Include="Assets\Scripts\CLIScript.cs" />
      <Compile Include="Assets\Scripts\GUIManager.cs" />
      <Compile Include="Assets\Scripts\InputManagementScript.cs" />
@@ -62,7 +64,7 @@
      <Compile Include="Assets\Scripts\Property.cs" />
      <Compile Include="Assets\Scripts\QueuePanelItemScript.cs" />
      <Compile Include="Assets\Scripts\QueuePanelScript.cs" />
-     <Compile Include="Assets\Scripts\ResourceScript.cs" />
+     <Compile Include="Assets\Scripts\Resource.cs" />
      <Compile Include="Assets\Scripts\TileScript.cs" />
      <Compile Include="Assets\Scripts\TileScriptv2.cs" />
      <Compile Include="Assets\Scripts\UnitActions.cs" />
