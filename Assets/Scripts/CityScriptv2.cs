@@ -4,31 +4,14 @@ using UnityEngine;
 
 public class CityScriptv2 : MonoBehaviour {
 
-//	// private variables
-//	private List<Citizen> Citizens;
-//
-//	// The Integer value for each citizen denotes the citizen's location in terms of Tiles.
-//	private GameObject[] Tiles;
-//	/*
-//	 * Internal structure of Tiles for representation purposes:
-//	 * 
-//	 * 		1	2	3
-//	 * 		4	0*	5
-//	 * 		6	7	8
-//	 * 
-//	 * Can always restructure this later
-//	 * Note: 0* denotes the city location relative to it's tiles.
-//	 */
+
 	private int currentFood; // Temporary variable for future food resource
 	private int currentProd; // Temporary variable for future production resource
 	private int currentGold; // Temporary variable for future gold accumulation
-//
-//	private int XCoord = -1;
-//	private int ZCoord = -1;
-//	// Map coordinates
 
 	private List<GameObject> Citizens;
 	private List<GameObject> Tiles;
+	private List<GameObject> availableTiles;
 
 	private List<Property> Buildings;
 	private List<Property> Queue;
@@ -54,6 +37,7 @@ public class CityScriptv2 : MonoBehaviour {
 		Queue.Add (PropertiesList.getList () [0]);
 		Citizens = new List<GameObject> ();
 		Tiles = GetComponentInParent<MapGenerationScript> ().getSquareRadius (this.transform.parent.gameObject, 1);
+		availableTiles = new List<GameObject> (Tiles);
 		// Placeholder
 
 		//int cPos = Random.Range (1, Tiles.Length);
@@ -68,6 +52,7 @@ public class CityScriptv2 : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		establish ();
 	}
 
 	// Update is called once per frame
@@ -75,7 +60,9 @@ public class CityScriptv2 : MonoBehaviour {
 	}
 
 	public void establish() {
-		NewCitizen ();
+		for (int i = 0; i < 5; i++) {
+			NewCitizen ();
+		}
 	}
 
 	/* What do we want to be able to do with citizens?
@@ -144,11 +131,15 @@ public class CityScriptv2 : MonoBehaviour {
 		GameObject chosenParent = this.transform.gameObject;
 		// Deterministic placement
 		if (Citizens.Count < Tiles.Count) {
-			chosenParent = Tiles [0];
-			foreach (GameObject currentTile in Tiles) {
+			chosenParent = availableTiles [0];
+			foreach (GameObject currentTile in availableTiles) {
+//				if (!currentTile.GetComponentInChildren<CitizenScript> () && chosenParent == this.transform.gameObject) {
+//					chosenParent = currentTile;
+//				}
 				if (chosenParent.GetComponent<TileScriptv2> ().getTileValue () < currentTile.GetComponent<TileScriptv2> ().getTileValue ())
 					chosenParent = currentTile;
 			}
+			availableTiles.Remove (chosenParent);
 		}
 		GameObject newCitizen = Instantiate (Resources.Load ("Citizen"), chosenParent.transform.position, Quaternion.identity, chosenParent.transform) as GameObject;
 		newCitizen.name = this.name + " Citizen " + (Citizens.Count + 1).ToString ();
@@ -257,15 +248,15 @@ public class CityScriptv2 : MonoBehaviour {
 		return currentGold;
 	}
 
-	public GameObject getTileAtOrigin() {
-		return Tiles [0];
-	}
-
 	public int getXCoord() {
 		return GetComponentInParent<TileScriptv2> ().getXCoord ();
 	}
 
 	public int getZCoord() {
 		return GetComponentInParent<TileScriptv2> ().getZCoord ();
+	}
+
+	public GameObject getTileAtOrigin() {
+		return this.transform.parent.gameObject;
 	}
 }

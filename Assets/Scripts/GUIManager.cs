@@ -77,12 +77,12 @@ public class GUIManager : MonoBehaviour {
 				heightText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getYCoord ();
 				coordText.text = hit.collider.GetComponent<TileScriptv2> ().getXCoord () + "/" + hit.collider.GetComponent<TileScriptv2> ().getZCoord ();
 			} else if (hit.collider.tag == "City") {
-				GameObject refTile = hit.collider.GetComponent<CityScript> ().getTileAtOrigin ();
+				GameObject refTile = hit.collider.GetComponent<CityScriptv2> ().getTileAtOrigin ();
 				foodText.text = "" + refTile.GetComponent<TileScriptv2>().getFood();
 				prodText.text = "" + refTile.GetComponent<TileScriptv2>().getProduction();
 				goldText.text = "" + refTile.GetComponent<TileScriptv2>().getGold();
 				heightText.text = "" + refTile.GetComponent<TileScriptv2>().getYCoord();
-				coordText.text = "" + hit.collider.GetComponent<CityScript> ().getXCoord () + "/" + hit.collider.GetComponent<CityScript> ().getZCoord ();
+				coordText.text = "" + hit.collider.GetComponent<CityScriptv2> ().getXCoord () + "/" + hit.collider.GetComponent<CityScriptv2> ().getZCoord ();
 			} else {
 				foodText.text = "--";
 				prodText.text = "--";
@@ -100,12 +100,12 @@ public class GUIManager : MonoBehaviour {
 
 			switch (selectedObject.tag) {
 			case "City":
-				GameObject refTile = selectedObject.GetComponent<CityScript> ().getTileAtOrigin ();
+				GameObject refTile = selectedObject.GetComponent<CityScriptv2> ().getTileAtOrigin ();
 				foodText.text = "" + refTile.GetComponent<TileScriptv2> ().getFood ();
 				prodText.text = "" + refTile.GetComponent<TileScriptv2> ().getProduction ();
 				goldText.text = "" + refTile.GetComponent<TileScriptv2> ().getGold ();
 				heightText.text = "" + refTile.GetComponent<TileScriptv2> ().getYCoord ();
-				coordText.text = "" + selectedObject.GetComponent<CityScript> ().getXCoord () + "/" + selectedObject.GetComponent<CityScript> ().getZCoord ();
+				coordText.text = "" + selectedObject.GetComponent<CityScriptv2> ().getXCoord () + "/" + selectedObject.GetComponent<CityScriptv2> ().getZCoord ();
 				cityQueuePanel.GetComponent<QueuePanelScript> ().CityRef = selectedObject;
 				cityQueuePanel.GetComponent<QueuePanelScript> ().UpdateQueue (); // Should be replaced by observable event system later
 				break;

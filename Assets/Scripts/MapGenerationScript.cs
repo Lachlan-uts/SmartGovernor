@@ -39,6 +39,7 @@ public class MapGenerationScript : MonoBehaviour {
 	private float tileSize = 4.0f;
 
 	private GameObject[,] tileList;
+	private List<GameObject> cityList;
 
 	// influence map related calculation variables
 	private float[,] influenceBaseMap;
@@ -53,6 +54,7 @@ public class MapGenerationScript : MonoBehaviour {
 		cityZ = 4;//Random.Range (2, (int)zMax - 3);
 		Debug.Log ("City Co-Ords: " + cityX + "/" + cityZ +".");
 		tileList = new GameObject[(int) xMax, (int) zMax];
+		cityList = new List<GameObject>();
 
 		influenceBaseMap = new float[(int)xMax, (int)zMax];
 		for (int xCount = 0; xCount < (int)xMax; xCount++) {
@@ -89,7 +91,18 @@ public class MapGenerationScript : MonoBehaviour {
 			}
 		} else if (genStage == 1) {
 			genStage = 2;
-			tileList [cityX, cityZ].GetComponent<TileScriptv2> ().createCity ();
+			//tileList [cityX, cityZ].GetComponent<TileScriptv2> ().createCity ();
+			Debug.Log ("About to assign the city!");
+			Debug.Log (tileList [cityX + 1, cityZ + 1].name);
+			cityList.Add (Instantiate (Resources.Load ("City"), 
+				tileList [cityX + 1, cityZ + 1].transform.position, 
+				Quaternion.identity, 
+				tileList [cityX + 1, cityZ + 1].transform) as GameObject);
+			cityList.Add (Instantiate (Resources.Load ("City"), 
+				tileList [cityX + 6, cityZ + 6].transform.position, 
+				Quaternion.identity, 
+				tileList [cityX + 6, cityZ + 6].transform) as GameObject);
+
 		}
 	}
 
