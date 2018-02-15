@@ -9,9 +9,13 @@ TagManager:
   - InputManager
   - Map
   - City
+<<<<<<< HEAD
   - GUI
   - Faction
   - Unit
+=======
+  - Citizen
+>>>>>>> Influence-Maps
   layers:
   - Default
   - TransparentFX

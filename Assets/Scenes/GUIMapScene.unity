@@ -1551,10 +1551,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseTile: {fileID: 1313276533921482, guid: feaa37865990d0643ac476ced5cd5e85, type: 2}
-  xMax: 80
-  zMax: 50
+  xMax: 40
+  zMax: 25
   randomSeed: 10
-  maxGenSteps: 80
+  maxGenSteps: 20
   noiseX: 20
   noiseZ: 15
   tileSize: 4
@@ -1565,7 +1565,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1180785132}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.1746459, y: -1.1160707, z: 1.1633077}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}

@@ -45,6 +45,7 @@ public class InputManagementScript : MonoBehaviour {
 
 	}
 
+<<<<<<< HEAD
 	// public methods
 	public void colonize(Vector3 position, int XCoord, int ZCoord) {
 		GameObject newCity = Instantiate (City, position, Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
@@ -62,4 +63,11 @@ public class InputManagementScript : MonoBehaviour {
 		GameObject.FindWithTag ("GameController").GetComponent<GameManagerScript> ().newCityMade (newCity, ownership);
 	}
 
+=======
+//	// public methods
+//		Debug.Log ("City Instantiated");
+//		newCity.GetComponent<CityScriptv2> ().setCoordinates (XCoord, ZCoord);
+//	}
+//
+>>>>>>> Influence-Maps
 }

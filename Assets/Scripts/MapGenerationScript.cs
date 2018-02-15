@@ -40,6 +40,7 @@ public class MapGenerationScript : MonoBehaviour {
 	private float tileSize = 4.0f;
 
 	private GameObject[,] tileList;
+	private List<GameObject> cityList;
 
 	// influence map related calculation variables
 	private float[,] influenceBaseMap;
@@ -56,6 +57,7 @@ public class MapGenerationScript : MonoBehaviour {
 		enemyZ = 22;
 		Debug.Log ("City Co-Ords: " + cityX + "/" + cityZ +".");
 		tileList = new GameObject[(int) xMax, (int) zMax];
+		cityList = new List<GameObject>();
 
 		influenceBaseMap = new float[(int)xMax, (int)zMax];
 		for (int xCount = 0; xCount < (int)xMax; xCount++) {
@@ -92,8 +94,23 @@ public class MapGenerationScript : MonoBehaviour {
 			}
 		} else if (genStage == 1) {
 			genStage = 2;
+<<<<<<< HEAD
 			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity (true);
 			tileList [enemyX, enemyZ].GetComponent<TileScript> ().createCity (false);
+=======
+			//tileList [cityX, cityZ].GetComponent<TileScriptv2> ().createCity ();
+			Debug.Log ("About to assign the city!");
+			Debug.Log (tileList [cityX + 1, cityZ + 1].name);
+			cityList.Add (Instantiate (Resources.Load ("City"), 
+				tileList [cityX + 1, cityZ + 1].transform.position, 
+				Quaternion.identity, 
+				tileList [cityX + 1, cityZ + 1].transform) as GameObject);
+			cityList.Add (Instantiate (Resources.Load ("City"), 
+				tileList [cityX + 6, cityZ + 6].transform.position, 
+				Quaternion.identity, 
+				tileList [cityX + 6, cityZ + 6].transform) as GameObject);
+
+>>>>>>> Influence-Maps
 		}
 	}
 
@@ -132,30 +149,29 @@ public class MapGenerationScript : MonoBehaviour {
 
 		while (xCount < xMax) {
 			while (zCount < zMax) {
+				//Only one which actually affects tile generation.
 				var hPerlin = Mathf.PerlinNoise (heightPerlinSeed + xCount / noiseX, heightPerlinSeed + zCount / noiseZ);
 				var tPerlin = Mathf.PerlinNoise (forestPerlinSeed + xCount / noiseX, forestPerlinSeed + zCount / noiseZ);
 				var aPerlin = Mathf.PerlinNoise (ariaPerlinSeed + xCount / noiseX, ariaPerlinSeed + zCount / noiseZ);
 				var mPerlin = Mathf.PerlinNoise (minePerlinSeed + xCount / noiseX, minePerlinSeed + zCount / noiseZ);
-				//T = (GameObject) Instantiate (baseTile, 
-				//	new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
-				//	Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
-				//T.GetComponent<Material> ().SetColor("ColourGrad:" + perlin, Color.Lerp (Color.green, Color.gray, perlin));
-				//tileList [(int)xCount, (int)zCount] = T;
 				Debug.Log("Before: " + tileList);
-				/* // This causes issues further down the line
-				tileList [(int)xCount, (int)zCount] = (GameObject) Instantiate (baseTile, 
-					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
-					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
+
+				//New method which works
+				Vector3 pos = new Vector3(xCount,0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f),zCount);
+				tileList [(int)xCount, (int)zCount] = Instantiate (Resources.Load ("TestTile"), pos, Quaternion.identity, transform) as GameObject;
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
-				tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
-				*/
-				// This does not cause issues further down the line
-				GameObject newTile = (GameObject) Instantiate (baseTile, 
-					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
-					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
-				newTile.name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
-				newTile.GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
-				tileList [(int)xCount, (int)zCount] = newTile;
+				tileList [(int)xCount, (int)zCount].GetComponent<TileScriptv2> ().SetStatistics (tPerlin,aPerlin,mPerlin);
+
+				//Old method which doesn't
+//				GameObject newTile = (GameObject) Instantiate (baseTile, 
+//					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
+//					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
+//
+//
+//				newTile.name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
+//
+//				newTile.GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
+//				tileList [(int)xCount, (int)zCount] = newTile;
 
 				Debug.Log ("After:  " + tileList);
 				//tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));
@@ -187,9 +203,27 @@ public class MapGenerationScript : MonoBehaviour {
 				break;
 			}
 		}
-
-
 	}
+
+	//Quick way of getting all the tiles a city has access to.
+	public List<GameObject> getSquareRadius(GameObject centerTile, int radius) {
+		List<GameObject> tiles = new List<GameObject> ();
+		int initialX = centerTile.GetComponent<TileScriptv2> ().getXCoord ();
+		int initialZ = centerTile.GetComponent<TileScriptv2> ().getZCoord ();
+		for (int x = (initialX - radius); x <= (initialX + radius); x++) {
+			for (int z = (initialZ - radius); z <= (initialZ + radius); z++) {
+				tiles.Add(getTileAt(x,z));
+			}
+		}
+		//remove the city tile itself from the list
+		tiles.Remove(centerTile);
+		return tiles;
+	}
+
+
+	//This is an ideal solution, in the short run I'll use a simpler system I've decided <-- Overkill currently. Stretch Goal.
+//	public GameObject[,] aStarCalculation() {
+//	}
 
 	// get methodology
 	public GameObject[,] getWholeMap() {

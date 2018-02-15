@@ -71,18 +71,18 @@ public class GUIManager : MonoBehaviour {
 		if (Physics.Raycast(cameraRay, out hit) && !selectedObject) {
 			//Debug.Log ("hitPoint: " + hit.transform.position);
 			if (hit.collider.tag == "Tile") {
-				foodText.text = "" + hit.collider.GetComponent<TileScript> ().getFood ();
-				prodText.text = "" + hit.collider.GetComponent<TileScript> ().getProduction ();
-				goldText.text = "" + hit.collider.GetComponent<TileScript> ().getGold ();
-				heightText.text = "" + hit.collider.GetComponent<TileScript> ().getHeight ();
-				coordText.text = hit.collider.GetComponent<TileScript> ().getXCoord () + "/" + hit.collider.GetComponent<TileScript> ().getZCoord ();
+				foodText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getFood ();
+				prodText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getProduction ();
+				goldText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getGold ();
+				heightText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getYCoord ();
+				coordText.text = hit.collider.GetComponent<TileScriptv2> ().getXCoord () + "/" + hit.collider.GetComponent<TileScriptv2> ().getZCoord ();
 			} else if (hit.collider.tag == "City") {
-				GameObject refTile = hit.collider.GetComponent<CityScript> ().getTileAtOrigin ();
-				foodText.text = "" + refTile.GetComponent<TileScript>().getFood();
-				prodText.text = "" + refTile.GetComponent<TileScript>().getProduction();
-				goldText.text = "" + refTile.GetComponent<TileScript>().getGold();
-				heightText.text = "" + refTile.GetComponent<TileScript>().getHeight();
-				coordText.text = "" + hit.collider.GetComponent<CityScript> ().getXCoord () + "/" + hit.collider.GetComponent<CityScript> ().getZCoord ();
+				GameObject refTile = hit.collider.GetComponent<CityScriptv2> ().getTileAtOrigin ();
+				foodText.text = "" + refTile.GetComponent<TileScriptv2>().getFood();
+				prodText.text = "" + refTile.GetComponent<TileScriptv2>().getProduction();
+				goldText.text = "" + refTile.GetComponent<TileScriptv2>().getGold();
+				heightText.text = "" + refTile.GetComponent<TileScriptv2>().getYCoord();
+				coordText.text = "" + hit.collider.GetComponent<CityScriptv2> ().getXCoord () + "/" + hit.collider.GetComponent<CityScriptv2> ().getZCoord ();
 			} else {
 				foodText.text = "--";
 				prodText.text = "--";
@@ -100,21 +100,21 @@ public class GUIManager : MonoBehaviour {
 
 			switch (selectedObject.tag) {
 			case "City":
-				GameObject refTile = selectedObject.GetComponent<CityScript> ().getTileAtOrigin ();
-				foodText.text = "" + refTile.GetComponent<TileScript> ().getFood ();
-				prodText.text = "" + refTile.GetComponent<TileScript> ().getProduction ();
-				goldText.text = "" + refTile.GetComponent<TileScript> ().getGold ();
-				heightText.text = "" + refTile.GetComponent<TileScript> ().getHeight ();
-				coordText.text = "" + selectedObject.GetComponent<CityScript> ().getXCoord () + "/" + selectedObject.GetComponent<CityScript> ().getZCoord ();
+				GameObject refTile = selectedObject.GetComponent<CityScriptv2> ().getTileAtOrigin ();
+				foodText.text = "" + refTile.GetComponent<TileScriptv2> ().getFood ();
+				prodText.text = "" + refTile.GetComponent<TileScriptv2> ().getProduction ();
+				goldText.text = "" + refTile.GetComponent<TileScriptv2> ().getGold ();
+				heightText.text = "" + refTile.GetComponent<TileScriptv2> ().getYCoord ();
+				coordText.text = "" + selectedObject.GetComponent<CityScriptv2> ().getXCoord () + "/" + selectedObject.GetComponent<CityScriptv2> ().getZCoord ();
 				cityQueuePanel.GetComponent<QueuePanelScript> ().CityRef = selectedObject;
 				cityQueuePanel.GetComponent<QueuePanelScript> ().UpdateQueue (); // Should be replaced by observable event system later
 				break;
 			case "Tile":
-				foodText.text = "" + selectedObject.GetComponent<TileScript>().getFood();
-				prodText.text = "" + selectedObject.GetComponent<TileScript>().getProduction();
-				goldText.text = "" + selectedObject.GetComponent<TileScript>().getGold();
-				heightText.text = "" + selectedObject.GetComponent<TileScript>().getHeight();
-				coordText.text = "" + selectedObject.GetComponent<TileScript> ().getXCoord () + "/" + selectedObject.GetComponent<TileScript> ().getZCoord ();
+				foodText.text = "" + selectedObject.GetComponent<TileScriptv2>().getFood();
+				prodText.text = "" + selectedObject.GetComponent<TileScriptv2>().getProduction();
+				goldText.text = "" + selectedObject.GetComponent<TileScriptv2>().getGold();
+				heightText.text = "" + selectedObject.GetComponent<TileScriptv2>().getYCoord();
+				coordText.text = "" + selectedObject.GetComponent<TileScriptv2> ().getXCoord () + "/" + selectedObject.GetComponent<TileScriptv2> ().getZCoord ();
 				break;
 			default:
 				foodText.text = "--";
@@ -186,13 +186,13 @@ public class GUIManager : MonoBehaviour {
 
 	// public methods
 
-	public void createCity() {
-		if (selectedObject) {
-			if (selectedObject.CompareTag ("Tile")) {
-				selectedObject.GetComponent<TileScript> ().createCity ();
-			}
-		}
-	}
+//	public void createCity() {
+//		if (selectedObject) {
+//			if (selectedObject.CompareTag ("Tile")) {
+//				selectedObject.GetComponent<TileScriptv2> ().createCity ();
+//			}
+//		}
+//	}
 
 	public void setCityMenuStatus(bool enabled) {
 		if (enabled) {

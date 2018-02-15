@@ -2,7 +2,9 @@
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Scripts\MapGenerationScript.cs">
     <Files>
+      <File FileName="Assets\Scripts\CityScript.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CLIScript.cs" Line="1" Column="1" />
+<<<<<<< HEAD
       <File FileName="Assets\Scripts\InputManagementScript.cs" Line="62" Column="113" />
       <File FileName="Assets\Scripts\CityScript.cs" Line="340" Column="1" />
       <File FileName="Assets\Scripts\TileScript.cs" Line="145" Column="135" />
@@ -18,6 +20,17 @@
       <File FileName="Assets\Scripts\UnitScript.cs" Line="79" Column="122" />
       <File FileName="Assets\Scripts\FactionScript.cs" Line="22" Column="38" />
       <File FileName="Assets\Scripts\GameManagerScript.cs" Line="54" Column="5" />
+=======
+      <File FileName="Assets\Scripts\InputManagementScript.cs" Line="52" Column="1" />
+      <File FileName="Assets\Scripts\MapGenerationScript.cs" Line="104" Column="35" />
+      <File FileName="Assets\Scripts\CitizenScript.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\TileScriptv2.cs" Line="109" Column="3" />
+      <File FileName="Assets\Scripts\CityScriptv2.cs" Line="63" Column="24" />
+      <File FileName="Assets\Scripts\Resource.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\Citizen.cs" Line="1" Column="1" />
+      <File FileName="Assets\Scripts\GUIManager.cs" Line="80" Column="84" />
+      <File FileName="Assets\Scripts\QueuePanelScript.cs" Line="77" Column="1" />
+>>>>>>> Influence-Maps
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -179,13 +179,13 @@ public class CityScript : MonoBehaviour {
 
 	public string SaveToString() {
 		string returnString = "";
-		returnString = returnString + Tiles [0].GetComponent<TileScript> ().getFood () + ","
-			+ Tiles [0].GetComponent<TileScript> ().getProduction () + ","
-			+ Tiles [0].GetComponent<TileScript> ().getGold ();
+		returnString = returnString + Tiles [0].GetComponent<TileScriptv2> ().getFood () + ","
+			+ Tiles [0].GetComponent<TileScriptv2> ().getProduction () + ","
+			+ Tiles [0].GetComponent<TileScriptv2> ().getGold ();
 		for (int iCount = 1; iCount < Tiles.Length; iCount++) {
-			returnString = returnString + ";" + Tiles [iCount].GetComponent<TileScript> ().getFood () + ","
-				+ Tiles [iCount].GetComponent<TileScript> ().getProduction () + ","
-				+ Tiles [iCount].GetComponent<TileScript> ().getGold ();
+			returnString = returnString + ";" + Tiles [iCount].GetComponent<TileScriptv2> ().getFood () + ","
+				+ Tiles [iCount].GetComponent<TileScriptv2> ().getProduction () + ","
+				+ Tiles [iCount].GetComponent<TileScriptv2> ().getGold ();
 		}
 
 		return returnString;
@@ -237,9 +237,9 @@ public class CityScript : MonoBehaviour {
 
 	private int getTileValue(int tileNo) {
 		if (tileNo != 0) {
-			return Tiles [tileNo].GetComponent<TileScript> ().getFood ()
-			+ Tiles [tileNo].GetComponent<TileScript> ().getProduction ()
-			+ Tiles [tileNo].GetComponent<TileScript> ().getGold ();
+			return Tiles [tileNo].GetComponent<TileScriptv2> ().getFood ()
+			+ Tiles [tileNo].GetComponent<TileScriptv2> ().getProduction ()
+			+ Tiles [tileNo].GetComponent<TileScriptv2> ().getGold ();
 		}
 
 		return 0;
@@ -366,7 +366,7 @@ public class CityScript : MonoBehaviour {
 		int totalFood = 0;
 		foreach (Citizen citizen in Citizens) {
 			if (citizen.getPosition() != 0) {
-				totalFood += Tiles [citizen.getPosition()].GetComponent<TileScript> ().getFood ();
+				totalFood += Tiles [citizen.getPosition()].GetComponent<TileScriptv2> ().getFood ();
 				Debug.Log(totalFood);
 			}
 		}
@@ -377,7 +377,7 @@ public class CityScript : MonoBehaviour {
 			}
 		}
 
-		totalFood += Tiles [0].GetComponent<TileScript> ().getFood ();
+		totalFood += Tiles [0].GetComponent<TileScriptv2> ().getFood ();
 		Debug.Log(totalFood);
 		totalFood -= Citizens.Count; // food consumed per citizen
 		Debug.Log(totalFood);
@@ -388,7 +388,7 @@ public class CityScript : MonoBehaviour {
 		int totalProd = 0;
 		foreach (Citizen citizen in Citizens) {
 			if (citizen.getPosition() != 0) {
-				totalProd += Tiles [citizen.getPosition()].GetComponent<TileScript> ().getProduction ();
+				totalProd += Tiles [citizen.getPosition()].GetComponent<TileScriptv2> ().getProduction ();
 			}
 		}
 
@@ -398,7 +398,7 @@ public class CityScript : MonoBehaviour {
 			}
 		}
 
-		totalProd += Tiles [0].GetComponent<TileScript> ().getProduction ();
+		totalProd += Tiles [0].GetComponent<TileScriptv2> ().getProduction ();
 		return totalProd;
 	}
 
@@ -406,7 +406,7 @@ public class CityScript : MonoBehaviour {
 		int totalGold = 0;
 		foreach (Citizen citizen in Citizens) {
 			if (citizen.getPosition() != 0) {
-				totalGold += Tiles [citizen.getPosition()].GetComponent<TileScript> ().getGold ();
+				totalGold += Tiles [citizen.getPosition()].GetComponent<TileScriptv2> ().getGold ();
 			}
 		}
 
@@ -418,7 +418,7 @@ public class CityScript : MonoBehaviour {
 			}
 		}
 
-		totalGold += Tiles [0].GetComponent<TileScript> ().getProduction ();
+		totalGold += Tiles [0].GetComponent<TileScriptv2> ().getProduction ();
 		return totalGold;
 	}
 
@@ -434,9 +434,9 @@ public class CityScript : MonoBehaviour {
 	public string getTileString() {
 		string returnString = "";
 		foreach (GameObject Tile in Tiles) { 
-			returnString = returnString + "{" + Tile.GetComponent<TileScript>().getFood() + ","
-				+ Tile.GetComponent<TileScript>().getProduction() + ","
-				+ Tile.GetComponent<TileScript>().getGold() + "}";
+			returnString = returnString + "{" + Tile.GetComponent<TileScriptv2>().getFood() + ","
+				+ Tile.GetComponent<TileScriptv2>().getProduction() + ","
+				+ Tile.GetComponent<TileScriptv2>().getGold() + "}";
 			if (Tile != Tiles [Tiles.Length - 1]) {
 				returnString += ".";
 			}
