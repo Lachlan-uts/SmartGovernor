@@ -172,13 +172,13 @@ public class GUIManager : MonoBehaviour {
 
 	// public methods
 
-	public void createCity() {
-		if (selectedObject) {
-			if (selectedObject.CompareTag ("Tile")) {
-				selectedObject.GetComponent<TileScriptv2> ().createCity ();
-			}
-		}
-	}
+//	public void createCity() {
+//		if (selectedObject) {
+//			if (selectedObject.CompareTag ("Tile")) {
+//				selectedObject.GetComponent<TileScriptv2> ().createCity ();
+//			}
+//		}
+//	}
 
 	public void setCityMenuStatus(bool enabled) {
 		if (enabled) {

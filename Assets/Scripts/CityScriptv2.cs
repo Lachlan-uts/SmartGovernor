@@ -146,6 +146,27 @@ public class CityScriptv2 : MonoBehaviour {
 		Citizens.Add (newCitizen);
 	}
 
+	private GameObject getTile(int x, int z) {
+		GameObject attemptTile = GetComponentInParent<MapGenerationScript> ().getTileAt (x, z);
+		if (Tiles.Contains (attemptTile))
+			return attemptTile;
+		return null;
+	}
+
+	public bool MoveCitizen(int oldX, int oldZ, int newX, int newZ) {
+		GameObject tileOld = getTile (oldX, oldZ);
+		GameObject tileNew = getTile (newX, newZ);
+
+		if (!availableTiles.Contains (tileOld) && availableTiles.Contains(tileNew)) {
+//			GameObject citizen = tileOld.GetComponentInChildren<CitizenScript> ();
+			tileOld.GetComponentInChildren<CitizenScript> ().transform.SetParent (tileNew.transform, false);
+			availableTiles.Add (tileOld);
+			availableTiles.Remove (tileNew);
+			return true;
+		}
+		return false;
+	}
+
 //	public bool MoveCitizen(int oldPos, int newPos) {
 //		bool done = false;
 //		if (newPos >= 0 && newPos < Tiles.Length) {
@@ -158,6 +179,7 @@ public class CityScriptv2 : MonoBehaviour {
 //
 //		return done;
 //	}
+
 
 	public bool ReplaceStartOfQueue(string nameOfBuilding) { // returns "true" if the building name was successfully added to queue
 		//if (Queue.Count == 1) // for discussion later
@@ -204,14 +226,14 @@ public class CityScriptv2 : MonoBehaviour {
 		return resourceCount;
 	}
 
-//	public string getCitizenLocations() {
-//		string returnString = "";
-//		foreach (GameObject citizen in Citizens) {
-//			returnString = returnString + citizen.GetComponentInParent<TileScriptv2>().getXCoord() + ", ";
-//		}
-//
-//		return returnString;
-//	}
+	public string getCitizenLocations() {
+		string returnString = "";
+		foreach (GameObject citizen in Citizens) {
+			returnString = returnString + "[" + citizen.GetComponentInParent<TileScriptv2>().getXCoord() + "," + citizen.GetComponentInParent<TileScriptv2>().getYCoord() + "]";
+		}
+
+		return returnString;
+	}
 
 	public string getTileString() {
 		string returnString = "";

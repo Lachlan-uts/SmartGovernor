@@ -84,14 +84,14 @@ public class CLIScript : MonoBehaviour {
 	}
 
 	void UpdateCity() {
-		City.GetComponent<CityScript> ().CityUpdate ();
+		City.GetComponent<CityScriptv2> ().CityUpdate ();
 
 		CLIStrings.Add ("City Updated...");
 		//SaveString += "";
 	}
 
 	void AddCitizen() {
-		City.GetComponent<CityScript> ().NewCitizen ();
+		City.GetComponent<CityScriptv2> ().NewCitizen ();
 
 		CLIStrings.Add ("Citizen Added, I guess...");
 	}
@@ -104,33 +104,41 @@ public class CLIScript : MonoBehaviour {
 		}
 	}
 
+	void MoveCitizenv2(int oldX, int oldZ, int newX, int newZ) {
+		if (City.GetComponent<CityScriptv2>().MoveCitizen(oldX,oldZ,newX,newZ)) {
+			CLIStrings.Add ("Citizen moved from " + oldX + "," + oldZ + " to " + newX + "," + newZ + ".");
+		} else {
+			CLIStrings.Add ("Citizen might not exist, or exists outside the valid range of tiles");
+		}
+	}
+
 	void GetCitizens() {
-		string citizenLocations = City.GetComponent<CityScript> ().getCitizenLocations ();
+		string citizenLocations = City.GetComponent<CityScriptv2> ().getCitizenLocations ();
 
 		CLIStrings.Add ("Locations: " + citizenLocations);
 	}
 
 	void GetFoodProduction() {
-		int totalFoodOut = City.GetComponent<CityScript> ().getTotalFood ();
+		int totalFoodOut = City.GetComponent<CityScriptv2> ().getTotalResource ("Food");
 
 		CLIStrings.Add ("Food Production for City: " + totalFoodOut);
 	}
 
 	void GetProdProduction() { // Need to think of a better name for "Production"
-		int totalProdOut = City.GetComponent<CityScript> ().getTotalProd ();
+		int totalProdOut = City.GetComponent<CityScriptv2> ().getTotalResource ("Production");
 
 		CLIStrings.Add ("Production Capacity for City: " + totalProdOut);
 	}
 
 	void GetGoldProduction() { // Need to think of a better name for "Production"
-		int totalGoldOut = City.GetComponent<CityScript> ().getTotalGold ();
+		int totalGoldOut = City.GetComponent<CityScriptv2> ().getTotalResource ("Gold");
 
 		CLIStrings.Add ("Gold Production for City: " + totalGoldOut);
 	}
 
 	void GetQueueOfCity() {
 		string StrQueue = "";
-		foreach (Property Build in City.GetComponent<CityScript>().getQueue()) {
+		foreach (Property Build in City.GetComponent<CityScriptv2>().getQueue()) {
 			StrQueue = StrQueue + Build.getName () + "; ";
 		}
 
@@ -138,7 +146,7 @@ public class CLIScript : MonoBehaviour {
 	}
 
 	void ReplaceQueueStart(string nameOfItem) {
-		if (City.GetComponent<CityScript> ().ReplaceStartOfQueue (FirstLetterToCapital(nameOfItem))) {
+		if (City.GetComponent<CityScriptv2> ().ReplaceStartOfQueue (FirstLetterToCapital(nameOfItem))) {
 			CLIStrings.Add ("Item added: " + nameOfItem);
 		} else {
 			CLIStrings.Add ("Item not added: either non-existant or requisites not met!");
@@ -146,7 +154,7 @@ public class CLIScript : MonoBehaviour {
 	}
 
 	void AddToCityQueue(string nameOfItem) {
-		if (City.GetComponent<CityScript> ().AddToQueue (FirstLetterToCapital(nameOfItem))) {
+		if (City.GetComponent<CityScriptv2> ().AddToQueue (FirstLetterToCapital(nameOfItem))) {
 			CLIStrings.Add ("Item added: " + nameOfItem);
 		} else {
 			CLIStrings.Add ("Item not added: either non-existant or requisites not met!");
@@ -154,7 +162,7 @@ public class CLIScript : MonoBehaviour {
 	}
 
 	void RemoveLastItemFromCityQueue() {
-		City.GetComponent<CityScript> ().RemoveFromQueue ();
+		City.GetComponent<CityScriptv2> ().RemoveFromQueue ();
 
 		CLIStrings.Add ("Last Item removed...");
 	}
@@ -213,6 +221,20 @@ public class CLIScript : MonoBehaviour {
 			bool x2d = int.TryParse(CommandParams [2], out x2);
 			if ((x1d) && (x2d)) {
 				MoveCitizen (x1, x2);
+			}
+			break;
+		case "movecoords":
+			int y1, y2, z1, z2 = 0;
+			string coord1 = CommandParams [1];
+			string coord2 = CommandParams [2];
+			string[] coords1 = coord1.Split ('/');
+			string[] coords2 = coord2.Split ('/');
+			bool y1d = int.TryParse (coords1[0], out y1);
+			bool z1d = int.TryParse (coords1[1], out z1);
+			bool y2d = int.TryParse (coords2[0], out y2);
+			bool z2d = int.TryParse (coords2[1], out z2);
+			if ((y1d) && (z1d) && (y2d)  && (z2d)) {
+				MoveCitizenv2 (y1, z1, y2, z2);
 			}
 			break;
 		case "update":

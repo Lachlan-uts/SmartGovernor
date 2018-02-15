@@ -130,13 +130,13 @@ public class TileScript : MonoBehaviour {
 		Debug.Log ("Tile: F:" + Food + "; P:" + Production + "; G:" + Gold + "; TV:" + (Food + Production + Gold));
 	}
 
-	public void createCity() {
-		if (!hasCity) {
-			hasCity = true;
-			// Code to create a city on this tile
-			GameObject.FindWithTag("InputManager").GetComponent<InputManagementScript>().colonize(transform.position, XCoord, ZCoord);
-		}
-	}
+//	public void createCity() {
+//		if (!hasCity) {
+//			hasCity = true;
+//			// Code to create a city on this tile
+//			GameObject.FindWithTag("InputManager").GetComponent<InputManagementScript>().colonize(transform.position, XCoord, ZCoord);
+//		}
+//	}
 
 	// get methodology
 	public int getFood() {
