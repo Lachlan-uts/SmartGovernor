@@ -167,20 +167,6 @@ public class CityScriptv2 : MonoBehaviour {
 		return false;
 	}
 
-//	public bool MoveCitizen(int oldPos, int newPos) {
-//		bool done = false;
-//		if (newPos >= 0 && newPos < Tiles.Length) {
-//			Citizen civilian;
-//			if ((civilian = getCitizenOnTile(oldPos)) != null && (!isCitizenOnTile(newPos) || newPos == 0)) {
-//				civilian.moveTo (newPos);
-//				done = true;
-//			}
-//		}
-//
-//		return done;
-//	}
-
-
 	public bool ReplaceStartOfQueue(string nameOfBuilding) { // returns "true" if the building name was successfully added to queue
 		//if (Queue.Count == 1) // for discussion later
 		//	

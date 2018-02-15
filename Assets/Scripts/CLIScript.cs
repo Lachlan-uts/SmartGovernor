@@ -229,13 +229,15 @@ public class CLIScript : MonoBehaviour {
 			string coord2 = CommandParams [2];
 			string[] coords1 = coord1.Split ('/');
 			string[] coords2 = coord2.Split ('/');
-			bool y1d = int.TryParse (coords1[0], out y1);
-			bool z1d = int.TryParse (coords1[1], out z1);
-			bool y2d = int.TryParse (coords2[0], out y2);
-			bool z2d = int.TryParse (coords2[1], out z2);
-			if ((y1d) && (z1d) && (y2d)  && (z2d)) {
+//			bool y1d = int.TryParse (coords1[0], out y1);
+//			bool z1d = int.TryParse (coords1[1], out z1);
+//			bool y2d = int.TryParse (coords2[0], out y2);
+//			bool z2d = int.TryParse (coords2[1], out z2);
+//			if ((y1d) && (z1d) && (y2d)  && (z2d)) {
+//				MoveCitizenv2 (y1, z1, y2, z2);
+//			}
+			if (int.TryParse (coords1[0], out y1) && int.TryParse (coords1[1], out z1) && int.TryParse (coords2[0], out y2) && int.TryParse (coords2[1], out z2))
 				MoveCitizenv2 (y1, z1, y2, z2);
-			}
 			break;
 		case "update":
 			UpdateCity ();
