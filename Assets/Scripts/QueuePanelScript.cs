@@ -76,7 +76,7 @@ public class QueuePanelScript : MonoBehaviour {
 
 		List<Property> CityQueue = CityReference.GetComponent<CityScriptv2> ().getQueue ();
 
-		Debug.Log ("CQC: " + CityQueue.Count + "; LQC: " + LocalQueue.Count);
+		//Debug.Log ("CQC: " + CityQueue.Count + "; LQC: " + LocalQueue.Count);
 
 		int iLocalCounter = 0;
 		while (iLocalCounter < CityQueue.Count || iLocalCounter < LocalQueue.Count) {

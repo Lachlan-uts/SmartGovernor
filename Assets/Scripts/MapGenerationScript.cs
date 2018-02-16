@@ -188,7 +188,7 @@ public class MapGenerationScript : MonoBehaviour {
 	}
 
 	public bool buildCity(int xCoord, int zCoord) {
-		if (cityList.Find (city => city.transform.parent.gameObject == tileList [xCoord, zCoord])) {
+		if (!cityList.Find (city => city.transform.parent.gameObject == tileList [xCoord, zCoord])) {
 			cityList.Add (Instantiate (Resources.Load ("City"), 
 				tileList [xCoord, zCoord].transform.position, 
 				Quaternion.identity, 

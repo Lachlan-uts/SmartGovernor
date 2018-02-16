@@ -78,6 +78,12 @@ public class CityScriptv2 : MonoBehaviour {
 		}
 	}
 
+	private void removeCitizen() {
+		GameObject citizen = Citizens [Citizens.Count - 1];
+		Citizens.RemoveAt (Citizens.Count - 1);
+		Destroy (citizen);
+	}
+
 	private void AttemptNewCitizen() {
 		if (currentFood > FoodRule())
 			NewCitizen ();
@@ -109,12 +115,14 @@ public class CityScriptv2 : MonoBehaviour {
 		if (!Build.getUse ()) {
 			Buildings.Add (Build);
 		} else { // Since this can currently only be used for "coinage", might as well put in the gold until we better develop this
+			Debug.Log(Build.getUnitName());
 			if (Build.getUnitName() == "") {
 				currentGold += (int)((1.0 * currentProd) / 2.0);
 				currentProd = 0;
-			} 
-			if (Build.getUnitName () == "newCity") {
+			} else if (Build.getUnitName ().Contains("newCity")) {
+				Debug.Log ("reached the city build.");
 				GetComponentInParent<MapGenerationScript> ().buildCity (Build.coordX, Build.coordZ);
+				removeCitizen ();
 			} else {
 				GameObject newUnit = Resources.Load<GameObject> (Build.getUnitName());
 				Instantiate (newUnit, this.transform);

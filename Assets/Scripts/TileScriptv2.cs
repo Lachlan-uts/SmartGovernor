@@ -51,9 +51,8 @@ public class TileScriptv2 : MonoBehaviour {
 //	// MouseOverFunctions
 //
 	void OnMouseOver() {
-		Debug.Log ("Tile:" + name + "Position:" + transform.position.ToString() + "parent's array: ");
-		Debug.Log ("Tile:" + name + "; F:" + Food + "; P:" + Production + "; G:" + Gold);
-
+		//Debug.Log ("Tile:" + name + "Position:" + transform.position.ToString() + "parent's array: ");
+		//Debug.Log ("Tile:" + name + "; F:" + Food + "; P:" + Production + "; G:" + Gold);
 	}
 		
 	public void SetStatistics(float forestPerlin, float ariaPerlin, float minePerlin) {
