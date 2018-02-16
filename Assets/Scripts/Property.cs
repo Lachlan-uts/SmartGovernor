@@ -10,6 +10,8 @@ public class Property {
 	private int Cost;
 	private bool ImmediateUse;
 	private string unitName;
+	public int coordX;
+	public int coordZ;
 
 	public Property() {
 		Name = "";
@@ -18,6 +20,8 @@ public class Property {
 		Cost = 1;
 		ImmediateUse = false;
 		unitName = "";
+		coordX = -1;
+		coordZ = -1;
 	}
 
 	public Property(string newName, string newOutput, int amount) {
@@ -27,6 +31,8 @@ public class Property {
 		Cost = 1;
 		ImmediateUse = false;
 		unitName = "";
+		coordX = -1;
+		coordZ = -1;
 	}
 
 	public Property(string newName, string newOutput, int amount, int newCost) {
@@ -36,6 +42,8 @@ public class Property {
 		Cost = newCost;
 		ImmediateUse = false;
 		unitName = "";
+		coordX = -1;
+		coordZ = -1;
 	}
 
 	public Property(string newName, string newOutput, int amount, int newCost, bool use) {
@@ -45,6 +53,8 @@ public class Property {
 		Cost = newCost;
 		ImmediateUse = use;
 		unitName = "";
+		coordX = -1;
+		coordZ = -1;
 	}
 
 	public Property(string newName, string newOutput, int amount, int newCost, string unit) {
@@ -54,6 +64,8 @@ public class Property {
 		Cost = newCost;
 		ImmediateUse = true;
 		unitName = unit;
+		coordX = -1;
+		coordZ = -1;
 	}
 
 	public string getName() {
@@ -79,4 +91,12 @@ public class Property {
 	public string getUnitName() {
 		return unitName;
 	}
+
+//	public int getCoordX() {
+//		return coordX;
+//	}
+
+//	public int getCoordZ() {
+//		return coordZ;
+//	}
 }

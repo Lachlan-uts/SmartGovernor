@@ -4,20 +4,13 @@ using UnityEngine;
 
 public class PropertiesList {
 
-<<<<<<< HEAD
-	public static Property[] properties = new Property[5] { new Property ("Coinage", "Gold", 0, 0, true), 
-		new Property ("Factory", "Production", 2, 16),
-		new Property ("Granary", "Food", 2, 12),
-		new Property ("Mine", "Gold", 4, 15),
-		new Property ("Testunit", "none", 0, 20, "TestUnit")};
-=======
-	public static Property[] properties = new Property[4] {
+	public static Property[] properties = new Property[6] {
 		new Property ("Coinage", "Gold", 0, 0, true), 
 		new Property ("Factory", "Production", 2, 16),
 		new Property ("Granary", "Food", 2, 12),
-		new Property ("Mine", "Gold", 4, 15)
-	};
->>>>>>> Influence-Maps
+		new Property ("Mine", "Gold", 4, 15),
+		new Property ("Testunit", "none", 0, 20, "TestUnit"),
+		new Property ("Newcity", "none", 0, 40, "newCity")};
 
 	public static Property getProperty(int position) {
 		return properties [position];

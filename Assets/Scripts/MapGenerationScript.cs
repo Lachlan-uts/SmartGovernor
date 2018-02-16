@@ -94,10 +94,8 @@ public class MapGenerationScript : MonoBehaviour {
 			}
 		} else if (genStage == 1) {
 			genStage = 2;
-<<<<<<< HEAD
-			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity (true);
-			tileList [enemyX, enemyZ].GetComponent<TileScript> ().createCity (false);
-=======
+//			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity (true);
+//			tileList [enemyX, enemyZ].GetComponent<TileScript> ().createCity (false);
 			//tileList [cityX, cityZ].GetComponent<TileScriptv2> ().createCity ();
 			Debug.Log ("About to assign the city!");
 			Debug.Log (tileList [cityX + 1, cityZ + 1].name);
@@ -109,8 +107,6 @@ public class MapGenerationScript : MonoBehaviour {
 				tileList [cityX + 6, cityZ + 6].transform.position, 
 				Quaternion.identity, 
 				tileList [cityX + 6, cityZ + 6].transform) as GameObject);
-
->>>>>>> Influence-Maps
 		}
 	}
 
@@ -162,40 +158,11 @@ public class MapGenerationScript : MonoBehaviour {
 				tileList [(int)xCount, (int)zCount].name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
 				tileList [(int)xCount, (int)zCount].GetComponent<TileScriptv2> ().SetStatistics (tPerlin,aPerlin,mPerlin);
 
-				//Old method which doesn't
-//				GameObject newTile = (GameObject) Instantiate (baseTile, 
-//					new Vector3(xCount*widthCount*tileSize, 0.2f * (((int) (Mathf.Lerp(0.0f, 10.0f, hPerlin) * 50.0f)) / 50.0f), zCount*lengthCount*tileSize), 
-//					Quaternion.Euler(new Vector3(0.0f, 0.0f, 0.0f)));
-//
-//
-//				newTile.name = ":Tile: x/z = " + (int)xCount + "/" + (int)zCount + ":";
-//
-//				newTile.GetComponent<TileScript> ().SetStatistics(hPerlin, tPerlin, aPerlin, mPerlin, (int) xCount, (int) zCount);
-//				tileList [(int)xCount, (int)zCount] = newTile;
-
-				Debug.Log ("After:  " + tileList);
-				//tileList [(int)xCount, (int)zCount].GetComponent<MeshRenderer> ().material.SetColor("_Color", Color.Lerp (Color.green, Color.gray, perlin));
-				//int foodPerlin = (int) Mathf.Lerp(1.0f, 5.0f, hPerlin);
-				//int prodPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
-				//int goldPerlin = (int) Mathf.Lerp(2.0f, 6.0f, hPerlin);
-				//int maxTreePerlin = (int)Mathf.Lerp (0.0f, 4.0f, hPerlin);
-
-				//Debug.Log (tileList [(int)xCount, (int)zCount].ToString ());
-				//if ((int) xCount == cityX && (int) zCount == cityZ) {
-				//	tileList [(int)xCount, (int)zCount].GetComponent<TileScript> ().createCity ();
-				//	Debug.Log ("City Founded!");
-				//}
-
-
-
 				zCount += 1.0f;
 				curStepCount++;
 				if (curStepCount >= maxSteps) {
 					break;
 				}
-
-
-				//Debug.Log (tileList.ToString ());
 			}
 			xCount += 1.0f;
 			curStepCount++;
@@ -220,12 +187,22 @@ public class MapGenerationScript : MonoBehaviour {
 		return tiles;
 	}
 
+	public bool buildCity(int xCoord, int zCoord) {
+		if (cityList.Find (city => city.transform.parent.gameObject == tileList [xCoord, zCoord])) {
+			cityList.Add (Instantiate (Resources.Load ("City"), 
+				tileList [xCoord, zCoord].transform.position, 
+				Quaternion.identity, 
+				tileList [xCoord, zCoord].transform) as GameObject);
+			return true;
+		}
+		return false;
+	}
 
 	//This is an ideal solution, in the short run I'll use a simpler system I've decided <-- Overkill currently. Stretch Goal.
 //	public GameObject[,] aStarCalculation() {
 //	}
 
-	// get methodology
+	// simple get methodology
 	public GameObject[,] getWholeMap() {
 		return tileList;
 	}
@@ -264,14 +241,7 @@ public class MapGenerationScript : MonoBehaviour {
 			influenceBaseMap [xCoord, zCoord - 1] -= cityLocalInfluence;
 			influenceBaseMap [xCoord + 1, zCoord - 1] -= cityLocalInfluence;
 		}
-
-
 		float cityRadius = 3.0f; // the radius wherein the city can influence
-
-
-
-
-
 	}
 
 	public void captureCity(int xCoord, int zCoord, bool isPlayer) {
@@ -291,5 +261,4 @@ public class MapGenerationScript : MonoBehaviour {
 	public float[,] getInfluenceMap(int xCoord, int zCoord) {
 		return influenceBaseMap;
 	}
-
 }

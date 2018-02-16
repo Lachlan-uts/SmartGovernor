@@ -4,18 +4,10 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - CLI
-  - Tile
-  - InputManager
-  - Map
-  - City
-<<<<<<< HEAD
-  - GUI
-  - Faction
-  - Unit
-=======
   - Citizen
->>>>>>> Influence-Maps
+  - City
+  - Unit
+  - Tile
   layers:
   - Default
   - TransparentFX

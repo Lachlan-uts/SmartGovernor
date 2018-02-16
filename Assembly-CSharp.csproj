@@ -59,6 +59,7 @@
      <Compile Include="Assets\Scripts\FactionScript.cs" />
      <Compile Include="Assets\Scripts\GameManagerScript.cs" />
      <Compile Include="Assets\Scripts\GUIManager.cs" />
+     <Compile Include="Assets\Scripts\IBuildable.cs" />
      <Compile Include="Assets\Scripts\InputManagementScript.cs" />
      <Compile Include="Assets\Scripts\MapGenerationScript.cs" />
      <Compile Include="Assets\Scripts\MapGenerationScriptv2.cs" />

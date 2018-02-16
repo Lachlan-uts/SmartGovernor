@@ -30,19 +30,12 @@ public class CityScriptv2 : MonoBehaviour {
 
 	// void Awake used for purposes of making savestring
 	void Awake () {
-//		Citizens = new List<Citizen> ();
-//		Tiles = new GameObject[9];
 		Buildings = new List<Property> ();
 		Queue = new List<Property> ();
 		Queue.Add (PropertiesList.getList () [0]);
 		Citizens = new List<GameObject> ();
 		Tiles = GetComponentInParent<MapGenerationScript> ().getSquareRadius (this.transform.parent.gameObject, 1);
 		availableTiles = new List<GameObject> (Tiles);
-		// Placeholder
-
-		//int cPos = Random.Range (1, Tiles.Length);
-		//Citizens.Add (new Citizen(cPos));
-		//NewCitizen ();
 
 		currentFood = 0;
 		currentProd = 0;
@@ -94,7 +87,15 @@ public class CityScriptv2 : MonoBehaviour {
 		return (int) (Mathf.Exp (1.3f) * (float) Citizens.Count);
 	}
 
+	private GameObject getTile(int x, int z) {
+		GameObject attemptTile = GetComponentInParent<MapGenerationScript> ().getTileAt (x, z);
+		if (attemptTile == getTileAtOrigin() || Tiles.Contains (attemptTile))
+			return attemptTile;
+		return null;
+	}
+
 	// public methods
+
 	public void CityUpdate() {
 		currentFood += getTotalResource ("Food");
 		currentFood -= Citizens.Count;
@@ -108,8 +109,16 @@ public class CityScriptv2 : MonoBehaviour {
 		if (!Build.getUse ()) {
 			Buildings.Add (Build);
 		} else { // Since this can currently only be used for "coinage", might as well put in the gold until we better develop this
-			currentGold += (int) ((1.0 * currentProd) / 2.0);
-			currentProd = 0;
+			if (Build.getUnitName() == "") {
+				currentGold += (int)((1.0 * currentProd) / 2.0);
+				currentProd = 0;
+			} 
+			if (Build.getUnitName () == "newCity") {
+				GetComponentInParent<MapGenerationScript> ().buildCity (Build.coordX, Build.coordZ);
+			} else {
+				GameObject newUnit = Resources.Load<GameObject> (Build.getUnitName());
+				Instantiate (newUnit, this.transform);
+			}
 		}
 	}
 
@@ -119,23 +128,24 @@ public class CityScriptv2 : MonoBehaviour {
 				if (!Build.getUse ()) {
 					Buildings.Add (Build);
 				} else { // Since this can currently only be used for "coinage", might as well put in the gold until we better develop this
-					currentGold += (int) ((1.0 * currentProd) / 2.0);
-					currentProd = 0;
+					if (Build.getUnitName() == "") {
+						currentGold += (int)((1.0 * currentProd) / 2.0);
+						currentProd = 0;
+					} else {
+						GameObject newUnit = Resources.Load<GameObject> (Build.getUnitName());
+						Instantiate (newUnit, this.transform);
+					}
 				}
 			}
 		}
 	}
 
 	public void NewCitizen() { // <--- This Function right here behaves interestingly
-		
 		GameObject chosenParent = this.transform.gameObject;
 		// Deterministic placement
 		if (Citizens.Count < Tiles.Count) {
 			chosenParent = availableTiles [0];
 			foreach (GameObject currentTile in availableTiles) {
-//				if (!currentTile.GetComponentInChildren<CitizenScript> () && chosenParent == this.transform.gameObject) {
-//					chosenParent = currentTile;
-//				}
 				if (chosenParent.GetComponent<TileScriptv2> ().getTileValue () < currentTile.GetComponent<TileScriptv2> ().getTileValue ())
 					chosenParent = currentTile;
 			}
@@ -144,13 +154,6 @@ public class CityScriptv2 : MonoBehaviour {
 		GameObject newCitizen = Instantiate (Resources.Load ("Citizen"), chosenParent.transform.position, Quaternion.identity, chosenParent.transform) as GameObject;
 		newCitizen.name = this.name + " Citizen " + (Citizens.Count + 1).ToString ();
 		Citizens.Add (newCitizen);
-	}
-
-	private GameObject getTile(int x, int z) {
-		GameObject attemptTile = GetComponentInParent<MapGenerationScript> ().getTileAt (x, z);
-		if (Tiles.Contains (attemptTile))
-			return attemptTile;
-		return null;
 	}
 
 	public bool MoveCitizen(int oldX, int oldZ, int newX, int newZ) {
@@ -164,8 +167,22 @@ public class CityScriptv2 : MonoBehaviour {
 			availableTiles.Remove (tileNew);
 			return true;
 		}
+		if (getTileAtOrigin() == tileOld && availableTiles.Contains (tileNew)) {
+			(Citizens.Find (citizen => citizen.transform.parent == this.transform)).transform.SetParent (tileNew.transform, false);
+			availableTiles.Remove (tileNew);
+			return true;
+		}
+		if (getTileAtOrigin() == tileNew) {
+			tileOld.GetComponentInChildren<CitizenScript> ().transform.SetParent (this.transform, false);
+			availableTiles.Add (tileOld);
+			return true;
+		}
 		return false;
 	}
+
+//	public bool MoveCitizen(int xCoord, int zCoord) {
+//
+//	}
 
 	public bool ReplaceStartOfQueue(string nameOfBuilding) { // returns "true" if the building name was successfully added to queue
 		//if (Queue.Count == 1) // for discussion later
@@ -181,12 +198,43 @@ public class CityScriptv2 : MonoBehaviour {
 		return addedToQueue;
 	}
 
+	public bool ReplaceStartOfQueue(string nameOfBuilding, int xCoord, int zCoord) { // returns "true" if the building name was successfully added to queue
+		//if (Queue.Count == 1) // for discussion later
+		//	
+		bool addedToQueue = false;
+		foreach (Property Build in PropertiesList.properties) {
+			if (Build.getName () == nameOfBuilding) {
+				addedToQueue = true;
+				Property buildCopy = Build;
+				buildCopy.coordX = xCoord;
+				buildCopy.coordZ = zCoord;
+				Queue.RemoveAt (0);
+				Queue.Insert (0, buildCopy);
+			}
+		}
+		return addedToQueue;
+	}
+
 	public bool AddToQueue(string nameOfBuilding) { // returns "true" if the building name was successfully added to queue
 		bool addedToQueue = false;
 		foreach (Property Build in PropertiesList.properties) {
 			if (Build.getName () == nameOfBuilding) {
 				addedToQueue = true;
 				Queue.Add (Build);
+			}
+		}
+		return addedToQueue;
+	}
+
+	public bool AddToQueue(string nameOfBuilding, int xCoord, int zCoord) { // returns "true" if the building name was successfully added to queue
+		bool addedToQueue = false;
+		foreach (Property Build in PropertiesList.properties) {
+			if (Build.getName () == nameOfBuilding) {
+				addedToQueue = true;
+				Property buildCopy = Build;
+				buildCopy.coordX = xCoord;
+				buildCopy.coordZ = zCoord;
+				Queue.Add (buildCopy);
 			}
 		}
 		return addedToQueue;
@@ -217,7 +265,6 @@ public class CityScriptv2 : MonoBehaviour {
 		foreach (GameObject citizen in Citizens) {
 			returnString = returnString + "[" + citizen.GetComponentInParent<TileScriptv2>().getXCoord() + "," + citizen.GetComponentInParent<TileScriptv2>().getYCoord() + "]";
 		}
-
 		return returnString;
 	}
 
@@ -231,8 +278,6 @@ public class CityScriptv2 : MonoBehaviour {
 				returnString += ".";
 			}
 		}
-
-
 		return returnString;
 	}
 

@@ -44,30 +44,22 @@ public class InputManagementScript : MonoBehaviour {
 
 
 	}
-
-<<<<<<< HEAD
-	// public methods
-	public void colonize(Vector3 position, int XCoord, int ZCoord) {
-		GameObject newCity = Instantiate (City, position, Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
-		Debug.Log ("City Instantiated");
-		newCity.GetComponent<CityScript> ().setCoordinates (XCoord, ZCoord);
-	}
-
-	public void colonize(Vector3 position, int XCoord, int ZCoord, bool ownership) {
-		GameObject newCity = Instantiate (City, position, Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
-		Debug.Log ("City Instantiated");
-		newCity.GetComponent<CityScript> ().setCoordinates (XCoord, ZCoord);
-		if (!ownership) {
-			newCity.GetComponent<CityScript> ().changeOwnership();
-		}
-		GameObject.FindWithTag ("GameController").GetComponent<GameManagerScript> ().newCityMade (newCity, ownership);
-	}
-
-=======
+		
 //	// public methods
+//	public void colonize(Vector3 position, int XCoord, int ZCoord) {
+//		GameObject newCity = Instantiate (City, position, Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
 //		Debug.Log ("City Instantiated");
-//		newCity.GetComponent<CityScriptv2> ().setCoordinates (XCoord, ZCoord);
+//		newCity.GetComponent<CityScript> ().setCoordinates (XCoord, ZCoord);
 //	}
 //
->>>>>>> Influence-Maps
+//	public void colonize(Vector3 position, int XCoord, int ZCoord, bool ownership) {
+//		GameObject newCity = Instantiate (City, position, Quaternion.Euler (new Vector3 (0.0f, 0.0f, 0.0f)));
+//		Debug.Log ("City Instantiated");
+//		newCity.GetComponent<CityScript> ().setCoordinates (XCoord, ZCoord);
+//		if (!ownership) {
+//			newCity.GetComponent<CityScript> ().changeOwnership();
+//		}
+//		GameObject.FindWithTag ("GameController").GetComponent<GameManagerScript> ().newCityMade (newCity, ownership);
+//	}
+		
 }
