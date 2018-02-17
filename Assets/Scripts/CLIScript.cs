@@ -96,15 +96,7 @@ public class CLIScript : MonoBehaviour {
 		CLIStrings.Add ("Citizen Added, I guess...");
 	}
 
-	void MoveCitizen(int oldPos, int newPos) {
-		if (City.GetComponent<CityScript> ().MoveCitizen (oldPos, newPos)) {
-			CLIStrings.Add ("Citizen moved from " + oldPos + " to " + newPos + ".");
-		} else {
-			CLIStrings.Add ("Citizen might not exist, or exists outside the valid range of tiles");
-		}
-	}
-
-	void MoveCitizenv2(int oldX, int oldZ, int newX, int newZ) {
+	void MoveCitizen(int oldX, int oldZ, int newX, int newZ) {
 		if (City.GetComponent<CityScriptv2>().MoveCitizen(oldX,oldZ,newX,newZ)) {
 			CLIStrings.Add ("Citizen moved from " + oldX + "," + oldZ + " to " + newX + "," + newZ + ".");
 		} else {
@@ -232,21 +224,13 @@ public class CLIScript : MonoBehaviour {
 			addToSS = false;
 			break;
 		case "move":
-			int x1, x2 = 0;
-			bool x1d = int.TryParse(CommandParams [1], out x1);
-			bool x2d = int.TryParse(CommandParams [2], out x2);
-			if ((x1d) && (x2d)) {
-				MoveCitizen (x1, x2);
-			}
-			break;
-		case "movecoords":
-			int y1, y2, z1, z2 = 0;
+			int x1, x2, z1, z2 = 0;
 			string coord1 = CommandParams [1];
 			string coord2 = CommandParams [2];
 			string[] coords1 = coord1.Split ('/');
 			string[] coords2 = coord2.Split ('/');
-			if (int.TryParse (coords1[0], out y1) && int.TryParse (coords1[1], out z1) && int.TryParse (coords2[0], out y2) && int.TryParse (coords2[1], out z2))
-				MoveCitizenv2 (y1, z1, y2, z2);
+			if (int.TryParse (coords1[0], out x1) && int.TryParse (coords1[1], out z1) && int.TryParse (coords2[0], out x2) && int.TryParse (coords2[1], out z2))
+				MoveCitizen (x1, z1, x2, z2);
 			break;
 		case "update":
 			UpdateCity ();
@@ -323,12 +307,13 @@ public class CLIScript : MonoBehaviour {
 
 		switch (CommandParams [0].ToLower()) {
 		case "move":
-			int x1, x2 = 0;
-			bool x1d = int.TryParse(CommandParams [1], out x1);
-			bool x2d = int.TryParse(CommandParams [2], out x2);
-			if ((x1d) && (x2d)) {
-				MoveCitizen (x1, x2);
-			}
+			int x1, x2, z1, z2 = 0;
+			string coord1 = CommandParams [1];
+			string coord2 = CommandParams [2];
+			string[] coords1 = coord1.Split ('/');
+			string[] coords2 = coord2.Split ('/');
+			if (int.TryParse (coords1[0], out x1) && int.TryParse (coords1[1], out z1) && int.TryParse (coords2[0], out x2) && int.TryParse (coords2[1], out z2))
+				MoveCitizen (x1, z1, x2, z2);
 			break;
 		case "update":
 			UpdateCity ();

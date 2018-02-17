@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GUIManager : MonoBehaviour {
 
@@ -32,6 +33,12 @@ public class GUIManager : MonoBehaviour {
 
 	// Setting up a theoretical event system based on whether this variable updates
 	private GameObject selectedObject;
+
+	//Annoying problem with ui elements
+	private GraphicRaycaster uiRaycaster;
+	private PointerEventData uiPointer;
+	private EventSystem eventSystem;
+
 	public GameObject sObject {
 		get { return selectedObject; }
 		set {
@@ -58,12 +65,14 @@ public class GUIManager : MonoBehaviour {
 		selectedObject = null;
 		setCityMenuStatus (false);
 		setUnitMenuStatus (false);
+
+		//Trying to fix this nonsense
+		uiRaycaster = GetComponent<GraphicRaycaster>();
+		eventSystem = GetComponent<EventSystem>();
 	}
 	
 	// Update is called once per frame
 	void Update () {
-
-
 		RaycastHit hit;
 		Ray cameraRay = MCamera.ScreenPointToRay (Input.mousePosition);
 		//Debug.Log ("hitPoint: " + hit.transform.position);
@@ -71,18 +80,18 @@ public class GUIManager : MonoBehaviour {
 		if (Physics.Raycast(cameraRay, out hit) && !selectedObject) {
 			//Debug.Log ("hitPoint: " + hit.transform.position);
 			if (hit.collider.tag == "Tile") {
-				foodText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getFood ();
-				prodText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getProduction ();
-				goldText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getGold ();
-				heightText.text = "" + hit.collider.GetComponent<TileScriptv2> ().getYCoord ();
+				foodText.text = "F: " + hit.collider.GetComponent<TileScriptv2> ().getFood ();
+				prodText.text = "P: " + hit.collider.GetComponent<TileScriptv2> ().getProduction ();
+				goldText.text = "G: " + hit.collider.GetComponent<TileScriptv2> ().getGold ();
+				heightText.text = "H: " + hit.collider.GetComponent<TileScriptv2> ().getYCoord ();
 				coordText.text = hit.collider.GetComponent<TileScriptv2> ().getXCoord () + "/" + hit.collider.GetComponent<TileScriptv2> ().getZCoord ();
 			} else if (hit.collider.tag == "City") {
 				GameObject refTile = hit.collider.GetComponent<CityScriptv2> ().getTileAtOrigin ();
-				foodText.text = "" + refTile.GetComponent<TileScriptv2>().getFood();
-				prodText.text = "" + refTile.GetComponent<TileScriptv2>().getProduction();
-				goldText.text = "" + refTile.GetComponent<TileScriptv2>().getGold();
-				heightText.text = "" + refTile.GetComponent<TileScriptv2>().getYCoord();
-				coordText.text = "" + hit.collider.GetComponent<CityScriptv2> ().getXCoord () + "/" + hit.collider.GetComponent<CityScriptv2> ().getZCoord ();
+				foodText.text = "F: " + refTile.GetComponent<TileScriptv2>().getFood();
+				prodText.text = "P: " + refTile.GetComponent<TileScriptv2>().getProduction();
+				goldText.text = "G: " + refTile.GetComponent<TileScriptv2>().getGold();
+				heightText.text = "H: " + refTile.GetComponent<TileScriptv2>().getYCoord();
+				coordText.text = "City at: " + hit.collider.GetComponent<CityScriptv2> ().getXCoord () + "/" + hit.collider.GetComponent<CityScriptv2> ().getZCoord ();
 			} else {
 				foodText.text = "--";
 				prodText.text = "--";
@@ -127,10 +136,25 @@ public class GUIManager : MonoBehaviour {
 		}
 
 		if (Input.GetButtonDown ("Fire1")) {
-			if (Physics.Raycast(cameraRay, out hit) && !selectedObject) {
-				sObject = hit.collider.gameObject;
-			} else {
-				sObject = null;
+			uiPointer = new PointerEventData (eventSystem);
+			uiPointer.position = Input.mousePosition;
+
+			List<RaycastResult> results = new List<RaycastResult> ();
+
+			uiRaycaster.Raycast (uiPointer, results);
+
+			foreach (RaycastResult result in results) {
+				Debug.Log ("Hit " + result.gameObject.name);
+			}
+
+			Debug.Log ("currently is selecting " + eventSystem.IsPointerOverGameObject());
+
+			if (!eventSystem.IsPointerOverGameObject ()) {
+				if (Physics.Raycast (cameraRay, out hit) && !selectedObject) {
+					sObject = hit.collider.gameObject;
+				} else {
+					sObject = null;
+				}
 			}
 		}
 
@@ -141,58 +165,14 @@ public class GUIManager : MonoBehaviour {
 					Debug.Log ("Order Recieved?");
 					if (hit.collider.tag == "Tile") {
 						Debug.Log ("Order Recieved!");
-						selectedObject.GetComponent<UnitScript> ().moveTo (hit.collider.GetComponent<TileScript> ().getXCoord (), 
-							hit.collider.GetComponent<TileScript> ().getZCoord ());
+						selectedObject.GetComponent<UnitScript> ().moveTo (hit.collider.GetComponent<TileScriptv2> ().getXCoord (), 
+							hit.collider.GetComponent<TileScriptv2> ().getZCoord ());
 					}
 				}
 			}
 		}
 
-		/*
-		// Food Text Management
-		if (foodNumber == null) {
-			foodText.text = "";
-		} else {
-			foodText.text = "" + foodNumber;
-		}
-
-		// Production Text Management
-		if (prodNumber == null) {
-			prodText.text = "";
-		} else {
-			prodText.text = "" + prodNumber;
-		}
-
-		// Gold Text Management
-		if (goldNumber == null) {
-			goldText.text = "";
-		} else {
-			goldText.text = "" + goldNumber;
-		}
-
-		// Height Text Management
-		if (heightNumber == null) {
-			heightText.text = "";
-		} else {
-			heightText.text = "" + heightNumber;
-		}*/
-
-
 	}
-
-	// private methods
-
-
-
-	// public methods
-
-//	public void createCity() {
-//		if (selectedObject) {
-//			if (selectedObject.CompareTag ("Tile")) {
-//				selectedObject.GetComponent<TileScriptv2> ().createCity ();
-//			}
-//		}
-//	}
 
 	public void setCityMenuStatus(bool enabled) {
 		if (enabled) {
@@ -225,6 +205,15 @@ public class GUIManager : MonoBehaviour {
 	public void disableMenus() {
 		setUnitMenuStatus (false);
 		setCityMenuStatus (false);
+	}
+
+	// button inputs
+
+	public void addToQueueNewCity() {
+		
+		if (selectedObject.tag == "City") {
+			selectedObject.GetComponent<CityScriptv2> ().AddToQueue ("Newcity");
+		}
 	}
 
 	// get methodology

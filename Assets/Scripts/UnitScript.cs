@@ -66,20 +66,20 @@ public class UnitScript : MonoBehaviour {
 
 			int lowestCScorePos = 0;
 			for (int LCSCount = 1; LCSCount < openSet.Count - 1; LCSCount++) { // No need to compare the first openSet item to itself
-				int lowX = openSet [lowestCScorePos].GetComponent<TileScript> ().getXCoord();
-				int lowZ = openSet [lowestCScorePos].GetComponent<TileScript> ().getZCoord ();
-				int comX = openSet [LCSCount].GetComponent<TileScript> ().getXCoord ();
-				int comZ = openSet [LCSCount].GetComponent<TileScript> ().getZCoord ();
+				int lowX = openSet [lowestCScorePos].GetComponent<TileScriptv2> ().getXCoord();
+				int lowZ = openSet [lowestCScorePos].GetComponent<TileScriptv2> ().getZCoord ();
+				int comX = openSet [LCSCount].GetComponent<TileScriptv2> ().getXCoord ();
+				int comZ = openSet [LCSCount].GetComponent<TileScriptv2> ().getZCoord ();
 				if (cScore [lowX, lowZ] > cScore [comX, comZ]) {
 					lowestCScorePos = LCSCount;
 				}
 			}
 
 			GameObject current = openSet[lowestCScorePos];
-			Debug.Log (current.GetComponent<TileScript> ().getXCoord () + "," + current.GetComponent<TileScript> ().getZCoord ());
+			Debug.Log (current.GetComponent<TileScriptv2> ().getXCoord () + "," + current.GetComponent<TileScriptv2> ().getZCoord ());
 
-			int curX = current.GetComponent<TileScript> ().getXCoord ();
-			int curZ = current.GetComponent<TileScript> ().getZCoord ();
+			int curX = current.GetComponent<TileScriptv2> ().getXCoord ();
+			int curZ = current.GetComponent<TileScriptv2> ().getZCoord ();
 			if (curX == goalXCoord && curZ == goalZCoord) {
 				// Return a reconstructed path based upon the cameFromList
 				return reconstructPath(cameFromList, current);
@@ -90,24 +90,24 @@ public class UnitScript : MonoBehaviour {
 
 			List<GameObject> neighbours = new List<GameObject>();
 
-			if (current.GetComponent<TileScript> ().getXCoord () > 0) {
-				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScript> ().getXCoord () - 1, 
-					current.GetComponent<TileScript> ().getZCoord ()));
+			if (current.GetComponent<TileScriptv2> ().getXCoord () > 0) {
+				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScriptv2> ().getXCoord () - 1, 
+					current.GetComponent<TileScriptv2> ().getZCoord ()));
 			}
 
-			if (current.GetComponent<TileScript> ().getZCoord () > 0) {
-				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScript> ().getXCoord (), 
-					current.GetComponent<TileScript> ().getZCoord () - 1));
+			if (current.GetComponent<TileScriptv2> ().getZCoord () > 0) {
+				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScriptv2> ().getXCoord (), 
+					current.GetComponent<TileScriptv2> ().getZCoord () - 1));
 			}
 
-			if (current.GetComponent<TileScript> ().getXCoord () < xSize) {
-				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScript> ().getXCoord () + 1, 
-					current.GetComponent<TileScript> ().getZCoord ()));
+			if (current.GetComponent<TileScriptv2> ().getXCoord () < xSize) {
+				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScriptv2> ().getXCoord () + 1, 
+					current.GetComponent<TileScriptv2> ().getZCoord ()));
 			}
 
-			if (current.GetComponent<TileScript> ().getZCoord () < zSize) {
-				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScript> ().getXCoord (), 
-					current.GetComponent<TileScript> ().getZCoord () + 1));
+			if (current.GetComponent<TileScriptv2> ().getZCoord () < zSize) {
+				neighbours.Add (Map.GetComponent<MapGenerationScript> ().getTileAt (current.GetComponent<TileScriptv2> ().getXCoord (), 
+					current.GetComponent<TileScriptv2> ().getZCoord () + 1));
 			}
 
 			foreach (GameObject neighbour in neighbours) {
@@ -119,18 +119,18 @@ public class UnitScript : MonoBehaviour {
 					openSet.Add (neighbour);
 				}
 
-				int tentativeCScore = cScore [current.GetComponent<TileScript> ().getXCoord (), current.GetComponent<TileScript> ().getZCoord ()] + 1;
-				if (tentativeCScore >= cScore [neighbour.GetComponent<TileScript> ().getXCoord (), neighbour.GetComponent<TileScript> ().getZCoord ()]) {
+				int tentativeCScore = cScore [current.GetComponent<TileScriptv2> ().getXCoord (), current.GetComponent<TileScriptv2> ().getZCoord ()] + 1;
+				if (tentativeCScore >= cScore [neighbour.GetComponent<TileScriptv2> ().getXCoord (), neighbour.GetComponent<TileScriptv2> ().getZCoord ()]) {
 					continue;
 				}
 
 				// Continue the neighbour chain logic here
 				// cameFrom list here
-				cameFromList[neighbour.GetComponent<TileScript>().getXCoord(), neighbour.GetComponent<TileScript>().getZCoord()] = current;
-				pScore[neighbour.GetComponent<TileScript>().getXCoord(), neighbour.GetComponent<TileScript>().getZCoord()] = tentativeCScore;
-				cScore [neighbour.GetComponent<TileScript> ().getXCoord (), neighbour.GetComponent<TileScript> ().getZCoord ()] 
-				= pScore [neighbour.GetComponent<TileScript> ().getXCoord (), neighbour.GetComponent<TileScript> ().getZCoord ()]
-				+ heuristicCostEstimate (neighbour.GetComponent<TileScript> ().getXCoord (), neighbour.GetComponent<TileScript> ().getZCoord (),
+				cameFromList[neighbour.GetComponent<TileScriptv2>().getXCoord(), neighbour.GetComponent<TileScriptv2>().getZCoord()] = current;
+				pScore[neighbour.GetComponent<TileScriptv2>().getXCoord(), neighbour.GetComponent<TileScriptv2>().getZCoord()] = tentativeCScore;
+				cScore [neighbour.GetComponent<TileScriptv2> ().getXCoord (), neighbour.GetComponent<TileScriptv2> ().getZCoord ()] 
+				= pScore [neighbour.GetComponent<TileScriptv2> ().getXCoord (), neighbour.GetComponent<TileScriptv2> ().getZCoord ()]
+				+ heuristicCostEstimate (neighbour.GetComponent<TileScriptv2> ().getXCoord (), neighbour.GetComponent<TileScriptv2> ().getZCoord (),
 					goalXCoord, goalZCoord);
 
 			}
@@ -146,7 +146,7 @@ public class UnitScript : MonoBehaviour {
 		List<GameObject> totalPath = new List<GameObject> ();
 		totalPath.Add (tCurrent);
 		while (arrayContains (cameFromList, tCurrent)) {
-			tCurrent = cameFromList [tCurrent.GetComponent<TileScript> ().getXCoord (), tCurrent.GetComponent<TileScript> ().getZCoord ()];
+			tCurrent = cameFromList [tCurrent.GetComponent<TileScriptv2> ().getXCoord (), tCurrent.GetComponent<TileScriptv2> ().getZCoord ()];
 			totalPath.Add (tCurrent);
 		}
 
@@ -193,7 +193,7 @@ public class UnitScript : MonoBehaviour {
 		string debugString = "";
 		if (TileList != null) {
 			foreach (GameObject Tile in TileList) {
-				debugString = debugString + "(" + Tile.GetComponent<TileScript> ().getXCoord () + "," + Tile.GetComponent<TileScript> ().getZCoord () + "),";
+				debugString = debugString + "(" + Tile.GetComponent<TileScriptv2> ().getXCoord () + "," + Tile.GetComponent<TileScriptv2> ().getZCoord () + "),";
 			}
 		}
 		Debug.Log (debugString);

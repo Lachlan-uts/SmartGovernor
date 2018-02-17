@@ -198,6 +198,45 @@ public class MapGenerationScript : MonoBehaviour {
 		return false;
 	}
 
+	//deterministic city building
+	public bool expansionBuildCity(GameObject city) {
+		List<GameObject> potentialTiles = new List<GameObject>();
+		GameObject cityTile = city.GetComponent<CityScriptv2> ().getTileAtOrigin ();
+		int cityTileX = cityTile.GetComponent<TileScriptv2> ().getXCoord ();
+		int cityTileZ = cityTile.GetComponent<TileScriptv2> ().getZCoord ();
+
+		//Going to get the 4 potential tiles.
+		potentialTiles.Add(getTileAt(cityTileX+3, cityTileZ));
+		potentialTiles.Add(getTileAt(cityTileX, cityTileZ+3));
+		potentialTiles.Add(getTileAt(cityTileX-3, cityTileZ));
+		potentialTiles.Add(getTileAt(cityTileX, cityTileZ-3));
+
+		//Remove all null tiles
+		potentialTiles.RemoveAll(tile => tile == null);
+
+		//Remove all tiles that already have a city
+		cityList.ForEach(Icity => potentialTiles.Remove(Icity.GetComponent<CityScriptv2>().getTileAtOrigin()));
+
+		//Sorts all tiles based off their comparitive value
+		potentialTiles.Sort ((x, y) => x.GetComponent<TileScriptv2> ().getTileValue ().CompareTo (y.GetComponent<TileScriptv2> ().getTileValue ()));
+		potentialTiles.Reverse ();
+
+		//Build a city at the chosen tile or return false if no valid options
+		if (potentialTiles.Count > 0) {
+			cityList.Add (Instantiate (Resources.Load ("City"), potentialTiles [0].transform.position, Quaternion.identity, potentialTiles [0].transform) as GameObject);
+			return true;
+		}
+		return false;
+	}
+
+	// updating cities, either all or by faction in the future
+
+	public void updateAllCities() {
+		foreach (GameObject city in cityList) {
+			city.GetComponent<CityScriptv2> ().CityUpdate ();
+		}
+	}
+
 	//This is an ideal solution, in the short run I'll use a simpler system I've decided <-- Overkill currently. Stretch Goal.
 //	public GameObject[,] aStarCalculation() {
 //	}
@@ -207,8 +246,11 @@ public class MapGenerationScript : MonoBehaviour {
 		return tileList;
 	}
 
-	public GameObject getTileAt(int XCoord, int ZCoord) {
-		return tileList [XCoord, ZCoord];
+	//Made it so now this returns either a valid tile when given valid coordinates or null when not.
+	public GameObject getTileAt(int xCoord, int zCoord) {
+		if (( xCoord > tileList.GetLowerBound (0) && xCoord < tileList.GetUpperBound(0) ) && ( zCoord > tileList.GetLowerBound (1) && zCoord < tileList.GetUpperBound(1) ))
+			return tileList [xCoord, zCoord];
+		return null;
 	}
 
 	public int getXSize() {

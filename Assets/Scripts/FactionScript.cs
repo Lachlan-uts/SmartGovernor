@@ -47,7 +47,7 @@ public class FactionScript : MonoBehaviour {
 
 	public void UpdateAssets() {
 		foreach (GameObject city in CitiesList) {
-			city.GetComponent<CityScript> ().CityUpdate ();
+			city.GetComponent<CityScriptv2> ().CityUpdate ();
 		}
 
 

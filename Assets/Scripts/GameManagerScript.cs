@@ -9,6 +9,9 @@ public class GameManagerScript : MonoBehaviour {
 	private List<GameObject> FactionManagers;
 	private GameObject GUI;
 
+	[SerializeField]
+	private GameObject Map;
+
 	// Use this for initialization
 	void Start () {
 		FactionManagers = new List<GameObject> ();
@@ -58,6 +61,10 @@ public class GameManagerScript : MonoBehaviour {
 		//}
 		FactionManagers [turnPhase].GetComponent<FactionScript> ().giveTurn ();
 
+	}
+
+	public void endCurrentTurn() {
+		Map.GetComponent<MapGenerationScript> ().updateAllCities();
 	}
 
 	// Planned turn structure (for a player and bot)

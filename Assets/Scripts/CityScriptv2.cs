@@ -80,7 +80,13 @@ public class CityScriptv2 : MonoBehaviour {
 
 	private void removeCitizen() {
 		GameObject citizen = Citizens [Citizens.Count - 1];
-		Citizens.RemoveAt (Citizens.Count - 1);
+		Citizens.Remove (citizen);
+		Debug.Log (this.transform);
+		Debug.Log (citizen.transform.parent);
+		if (!citizen.transform.parent.Equals(this.transform)) {
+			Debug.Log ("the tile was added.");
+			availableTiles.Add (citizen.transform.parent.gameObject);
+		}
 		Destroy (citizen);
 	}
 
@@ -107,8 +113,8 @@ public class CityScriptv2 : MonoBehaviour {
 		currentFood -= Citizens.Count;
 		currentProd += getTotalResource ("Production");
 		currentGold += getTotalResource ("Gold");
-		AttemptConstruction ();
 		AttemptNewCitizen ();
+		AttemptConstruction ();
 	}
 
 	public void NewBuilding(Property Build) {
@@ -121,7 +127,8 @@ public class CityScriptv2 : MonoBehaviour {
 				currentProd = 0;
 			} else if (Build.getUnitName ().Contains("newCity")) {
 				Debug.Log ("reached the city build.");
-				GetComponentInParent<MapGenerationScript> ().buildCity (Build.coordX, Build.coordZ);
+				GetComponentInParent<MapGenerationScript> ().expansionBuildCity (this.gameObject);
+				//GetComponentInParent<MapGenerationScript> ().buildCity (Build.coordX, Build.coordZ);
 				removeCitizen ();
 			} else {
 				GameObject newUnit = Resources.Load<GameObject> (Build.getUnitName());
@@ -151,7 +158,8 @@ public class CityScriptv2 : MonoBehaviour {
 	public void NewCitizen() { // <--- This Function right here behaves interestingly
 		GameObject chosenParent = this.transform.gameObject;
 		// Deterministic placement
-		if (Citizens.Count < Tiles.Count) {
+		Debug.Log (availableTiles.Count);
+		if (availableTiles.Count > 0) {
 			chosenParent = availableTiles [0];
 			foreach (GameObject currentTile in availableTiles) {
 				if (chosenParent.GetComponent<TileScriptv2> ().getTileValue () < currentTile.GetComponent<TileScriptv2> ().getTileValue ())
