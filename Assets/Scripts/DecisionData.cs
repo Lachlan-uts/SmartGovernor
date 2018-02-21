@@ -43,4 +43,8 @@ public class DecisionData {
 		}
 		return (T)(object)closestValue;
 	}
+
+	public override string ToString() {
+		return buildTarget.ToString () + ", " + decision.ToString () + ", " + cCount.ToString () + ", " + tCount.ToString ();
+	}
 }

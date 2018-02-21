@@ -124,7 +124,7 @@ public class CityScriptv2 : MonoBehaviour {
 		/*
 		 * Need a method to pass negative events (turns where a user decided not to add a city to the queue or anything else that might be situationally helpful)
 		 */
-		Debug.Log (Decisions.ToString ());
+		Decisions.ForEach (s => Debug.Log (s.ToString ()));
 		currentFood += getTotalResource ("Food");
 		currentFood -= Citizens.Count;
 		currentProd += getTotalResource ("Production");
@@ -157,7 +157,6 @@ public class CityScriptv2 : MonoBehaviour {
 	public void NewCitizen() { // <--- This Function right here behaves interestingly
 		GameObject chosenParent = this.transform.gameObject;
 		// Deterministic placement
-		Debug.Log (availableTiles.Count);
 		if (availableTiles.Count > 0) {
 			chosenParent = availableTiles [0];
 			foreach (GameObject currentTile in availableTiles) {
