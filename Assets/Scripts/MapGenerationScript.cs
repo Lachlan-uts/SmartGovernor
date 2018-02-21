@@ -36,8 +36,6 @@ public class MapGenerationScript : MonoBehaviour {
 	private float noiseX = 20;
 	[SerializeField]
 	private float noiseZ = 15;
-	[SerializeField]
-	private float tileSize = 4.0f;
 
 	private GameObject[,] tileList;
 	private List<GameObject> cityList;
@@ -51,8 +49,8 @@ public class MapGenerationScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		cityX = 5;//Random.Range (2, (int)xMax - 3);
-		cityZ = 4;//Random.Range (2, (int)zMax - 3);
+		cityX = 2;//Random.Range (2, (int)xMax - 3);
+		cityZ = 2;//Random.Range (2, (int)zMax - 3);
 		enemyX = 24;
 		enemyZ = 22;
 		Debug.Log ("City Co-Ords: " + cityX + "/" + cityZ +".");
@@ -94,19 +92,10 @@ public class MapGenerationScript : MonoBehaviour {
 			}
 		} else if (genStage == 1) {
 			genStage = 2;
-//			tileList [cityX, cityZ].GetComponent<TileScript> ().createCity (true);
-//			tileList [enemyX, enemyZ].GetComponent<TileScript> ().createCity (false);
-			//tileList [cityX, cityZ].GetComponent<TileScriptv2> ().createCity ();
-			Debug.Log ("About to assign the city!");
-			Debug.Log (tileList [cityX + 1, cityZ + 1].name);
 			cityList.Add (Instantiate (Resources.Load ("City"), 
-				tileList [cityX + 1, cityZ + 1].transform.position, 
+				tileList [cityX, cityZ].transform.position, 
 				Quaternion.identity, 
-				tileList [cityX + 1, cityZ + 1].transform) as GameObject);
-			cityList.Add (Instantiate (Resources.Load ("City"), 
-				tileList [cityX + 6, cityZ + 6].transform.position, 
-				Quaternion.identity, 
-				tileList [cityX + 6, cityZ + 6].transform) as GameObject);
+				tileList [cityX, cityZ].transform) as GameObject);
 		}
 	}
 
@@ -232,9 +221,15 @@ public class MapGenerationScript : MonoBehaviour {
 	// updating cities, either all or by faction in the future
 
 	public void updateAllCities() {
-		foreach (GameObject city in cityList) {
-			city.GetComponent<CityScriptv2> ().CityUpdate ();
+		using (IEnumerator<GameObject> cityEnum = cityList.GetEnumerator ()) {
+			while (cityEnum.MoveNext ()) {
+				cityEnum.Current.GetComponent<CityScriptv2> ().CityUpdate ();
+			}
 		}
+//
+//		foreach (GameObject city in cityList) {
+//			city.GetComponent<CityScriptv2> ().CityUpdate ();
+//		}
 	}
 
 	//This is an ideal solution, in the short run I'll use a simpler system I've decided <-- Overkill currently. Stretch Goal.
@@ -259,48 +254,5 @@ public class MapGenerationScript : MonoBehaviour {
 
 	public int getZSize() {
 		return (int)zMax;
-	}
-
-	public void denoteCity(int xCoord, int zCoord, bool isPlayer) {
-		if (isPlayer) {
-			influenceBaseMap [xCoord, zCoord] += cityCenterInfluence;
-			influenceBaseMap [xCoord - 1, zCoord + 1] += cityLocalInfluence;
-			influenceBaseMap [xCoord, zCoord + 1] += cityLocalInfluence;
-			influenceBaseMap [xCoord + 1, zCoord + 1] += cityLocalInfluence;
-			influenceBaseMap [xCoord - 1, zCoord] += cityLocalInfluence;
-			influenceBaseMap [xCoord + 1, zCoord] += cityLocalInfluence;
-			influenceBaseMap [xCoord - 1, zCoord - 1] += cityLocalInfluence;
-			influenceBaseMap [xCoord, zCoord - 1] += cityLocalInfluence;
-			influenceBaseMap [xCoord + 1, zCoord - 1] += cityLocalInfluence;
-		} else {
-			influenceBaseMap [xCoord, zCoord] -= cityCenterInfluence;
-			influenceBaseMap [xCoord - 1, zCoord + 1] -= cityLocalInfluence;
-			influenceBaseMap [xCoord, zCoord + 1] -= cityLocalInfluence;
-			influenceBaseMap [xCoord + 1, zCoord + 1] -= cityLocalInfluence;
-			influenceBaseMap [xCoord - 1, zCoord] -= cityLocalInfluence;
-			influenceBaseMap [xCoord + 1, zCoord] -= cityLocalInfluence;
-			influenceBaseMap [xCoord - 1, zCoord - 1] -= cityLocalInfluence;
-			influenceBaseMap [xCoord, zCoord - 1] -= cityLocalInfluence;
-			influenceBaseMap [xCoord + 1, zCoord - 1] -= cityLocalInfluence;
-		}
-		float cityRadius = 3.0f; // the radius wherein the city can influence
-	}
-
-	public void captureCity(int xCoord, int zCoord, bool isPlayer) {
-		if (isPlayer) {
-			denoteCity (xCoord, zCoord, true);
-			denoteCity (xCoord, zCoord, true);
-		} else {
-			denoteCity (xCoord, zCoord, false);
-			denoteCity (xCoord, zCoord, false);
-		}
-	}
-
-	public float[,] getInfluenceMap() {
-		return influenceBaseMap;
-	}
-
-	public float[,] getInfluenceMap(int xCoord, int zCoord) {
-		return influenceBaseMap;
 	}
 }

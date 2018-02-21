@@ -1,9 +1,12 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using AssemblyCSharp;
 
 public class CityScriptv2 : MonoBehaviour {
 
+	//Govenor status
+	private bool govenorEnable;
 
 	private int currentFood; // Temporary variable for future food resource
 	private int currentProd; // Temporary variable for future production resource
@@ -15,6 +18,9 @@ public class CityScriptv2 : MonoBehaviour {
 
 	private List<Property> Buildings;
 	private List<Property> Queue;
+
+	//List of turn actions
+	private List<DecisionData> Decisions;
 
 
 	private int randomSeed = 10; //For purposes of consistency in testing the AI
@@ -32,7 +38,8 @@ public class CityScriptv2 : MonoBehaviour {
 	void Awake () {
 		Buildings = new List<Property> ();
 		Queue = new List<Property> ();
-		Queue.Add (PropertiesList.getList () [0]);
+		Queue.Add (PropertiesList.dictProperties[Buildables.Coinage]);
+		//Queue.Add (PropertiesList.getList () [0]);
 		Citizens = new List<GameObject> ();
 		Tiles = GetComponentInParent<MapGenerationScript> ().getSquareRadius (this.transform.parent.gameObject, 1);
 		availableTiles = new List<GameObject> (Tiles);
@@ -41,6 +48,11 @@ public class CityScriptv2 : MonoBehaviour {
 		currentProd = 0;
 		currentGold = 0;
 
+		//for now we'll just instantiate all cities with govenor disabled
+		govenorEnable = false;
+
+		//and the player decisions should start empty
+		Decisions = new List<DecisionData> ();
 	}
 
 	// Use this for initialization
@@ -109,12 +121,17 @@ public class CityScriptv2 : MonoBehaviour {
 	// public methods
 
 	public void CityUpdate() {
+		/*
+		 * Need a method to pass negative events (turns where a user decided not to add a city to the queue or anything else that might be situationally helpful)
+		 */
+		Debug.Log (Decisions.ToString ());
 		currentFood += getTotalResource ("Food");
 		currentFood -= Citizens.Count;
 		currentProd += getTotalResource ("Production");
 		currentGold += getTotalResource ("Gold");
 		AttemptNewCitizen ();
 		AttemptConstruction ();
+		Decisions.Clear ();
 	}
 
 	public void NewBuilding(Property Build) {
@@ -133,24 +150,6 @@ public class CityScriptv2 : MonoBehaviour {
 			} else {
 				GameObject newUnit = Resources.Load<GameObject> (Build.getUnitName());
 				Instantiate (newUnit, this.transform);
-			}
-		}
-	}
-
-	public void NewBuilding(string nameOfBuilding) {
-		foreach (Property Build in PropertiesList.properties) {
-			if (Build.getName () == nameOfBuilding) {
-				if (!Build.getUse ()) {
-					Buildings.Add (Build);
-				} else { // Since this can currently only be used for "coinage", might as well put in the gold until we better develop this
-					if (Build.getUnitName() == "") {
-						currentGold += (int)((1.0 * currentProd) / 2.0);
-						currentProd = 0;
-					} else {
-						GameObject newUnit = Resources.Load<GameObject> (Build.getUnitName());
-						Instantiate (newUnit, this.transform);
-					}
-				}
 			}
 		}
 	}
@@ -196,10 +195,6 @@ public class CityScriptv2 : MonoBehaviour {
 		return false;
 	}
 
-//	public bool MoveCitizen(int xCoord, int zCoord) {
-//
-//	}
-
 	public bool ReplaceStartOfQueue(string nameOfBuilding) { // returns "true" if the building name was successfully added to queue
 		//if (Queue.Count == 1) // for discussion later
 		//	
@@ -229,6 +224,25 @@ public class CityScriptv2 : MonoBehaviour {
 			}
 		}
 		return addedToQueue;
+	}
+
+	public bool AddToQueue(Buildables buildy) {
+		Property attemptedProp = null;
+		if (PropertiesList.dictProperties.TryGetValue (buildy, out attemptedProp)) {
+			if (buildy == Buildables.Newcity) {
+				/*
+				 * Pass relevent information here.
+				 * This included but is not limited to:
+				 * Citizen count
+				 * Food production rate
+				 * Food rule
+				 */
+				Decisions.Add(new DecisionData(buildy, true, Citizens.Count, GameManagerScript.turnNumber));
+			}
+			Queue.Add (attemptedProp);
+			return true;
+		}
+		return false;
 	}
 
 	public bool AddToQueue(string nameOfBuilding) { // returns "true" if the building name was successfully added to queue
@@ -262,6 +276,8 @@ public class CityScriptv2 : MonoBehaviour {
 			Queue.Add (PropertiesList.getList () [0]);
 		}
 	}
+
+	//All public get methods
 
 	public int getTotalResource(string resource) {
 		int resourceCount = this.GetComponentInParent<TileScriptv2>().getResource(resource).getValue();
@@ -328,4 +344,20 @@ public class CityScriptv2 : MonoBehaviour {
 	public GameObject getTileAtOrigin() {
 		return this.transform.parent.gameObject;
 	}
+
+	//Give the A.I player data
+	public List<DecisionData> getDecisionData() {
+		return Decisions;
+	}
+
+	//public toggle methods
+	public bool toggleGovenor() {
+		return govenorEnable = !govenorEnable;
+	}
+
+	//User action and information store method(s)
+//	public T storePlayerAction<T>(T input) {
+//		
+//	}
+
 }

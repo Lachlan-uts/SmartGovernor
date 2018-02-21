@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using AssemblyCSharp;
 
 public class GUIManager : MonoBehaviour {
 
@@ -210,10 +211,14 @@ public class GUIManager : MonoBehaviour {
 	// button inputs
 
 	public void addToQueueNewCity() {
-		
 		if (selectedObject.tag == "City") {
-			selectedObject.GetComponent<CityScriptv2> ().AddToQueue ("Newcity");
+			selectedObject.GetComponent<CityScriptv2> ().AddToQueue (Buildables.Newcity);
 		}
+	}
+
+	public void toggleGovenor() {
+		if (selectedObject.tag.Equals("City"))
+			selectedObject.GetComponent<CityScriptv2>().toggleGovenor();
 	}
 
 	// get methodology

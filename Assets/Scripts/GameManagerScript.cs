@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour {
 
-	public int turnNumber;
+	public static int turnNumber;
 	private int turnPhase;
 	private List<GameObject> FactionManagers;
 	private GameObject GUI;
@@ -65,6 +65,7 @@ public class GameManagerScript : MonoBehaviour {
 
 	public void endCurrentTurn() {
 		Map.GetComponent<MapGenerationScript> ().updateAllCities();
+		turnNumber++;
 	}
 
 	// Planned turn structure (for a player and bot)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
+using AssemblyCSharp;
 
 public class CLIScript : MonoBehaviour {
 
@@ -154,11 +155,19 @@ public class CLIScript : MonoBehaviour {
 	}
 
 	void AddToCityQueue(string nameOfItem) {
-		if (City.GetComponent<CityScriptv2> ().AddToQueue (FirstLetterToCapital(nameOfItem))) {
+		Buildables enumOfItem;
+		if (System.Enum.TryParse<Buildables> (nameOfItem, true, out enumOfItem)) {
+			City.GetComponent<CityScriptv2> ().AddToQueue (enumOfItem);
 			CLIStrings.Add ("Item added: " + nameOfItem);
 		} else {
 			CLIStrings.Add ("Item not added: either non-existant or requisites not met!");
 		}
+//		 System.Enum.Parse (Buildables, nameOfItem);
+//		if (City.GetComponent<CityScriptv2> ().AddToQueue (FirstLetterToCapital(nameOfItem))) {
+//			CLIStrings.Add ("Item added: " + nameOfItem);
+//		} else {
+//			CLIStrings.Add ("Item not added: either non-existant or requisites not met!");
+//		}
 	}
 
 	void AddToCityQueue(string nameOfItem, int xCoord, int zCoord) {
