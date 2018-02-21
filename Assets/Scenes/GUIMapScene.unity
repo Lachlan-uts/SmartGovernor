@@ -739,7 +739,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 597e80b9618237f4cb20b2899b6e1f85, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  turnNumber: 0
   Map: {fileID: 1180785132}
 --- !u!4 &587554731
 Transform:
@@ -2961,7 +2960,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1344363523}
-        m_MethodName: toggleGovenor
+        m_MethodName: toggleGovernor
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -5,9 +5,6 @@ using AssemblyCSharp;
 
 public class CityScriptv2 : MonoBehaviour {
 
-	//Govenor status
-	private bool govenorEnable;
-
 	private int currentFood; // Temporary variable for future food resource
 	private int currentProd; // Temporary variable for future production resource
 	private int currentGold; // Temporary variable for future gold accumulation
@@ -21,7 +18,6 @@ public class CityScriptv2 : MonoBehaviour {
 
 	//List of turn actions
 	private List<DecisionData> Decisions;
-
 
 	private int randomSeed = 10; //For purposes of consistency in testing the AI
 
@@ -48,9 +44,6 @@ public class CityScriptv2 : MonoBehaviour {
 		currentProd = 0;
 		currentGold = 0;
 
-		//for now we'll just instantiate all cities with govenor disabled
-		govenorEnable = false;
-
 		//and the player decisions should start empty
 		Decisions = new List<DecisionData> ();
 	}
@@ -65,7 +58,7 @@ public class CityScriptv2 : MonoBehaviour {
 	}
 
 	public void establish() {
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 1; i++) {
 			NewCitizen ();
 		}
 	}
@@ -93,10 +86,7 @@ public class CityScriptv2 : MonoBehaviour {
 	private void removeCitizen() {
 		GameObject citizen = Citizens [Citizens.Count - 1];
 		Citizens.Remove (citizen);
-		Debug.Log (this.transform);
-		Debug.Log (citizen.transform.parent);
 		if (!citizen.transform.parent.Equals(this.transform)) {
-			Debug.Log ("the tile was added.");
 			availableTiles.Add (citizen.transform.parent.gameObject);
 		}
 		Destroy (citizen);
@@ -118,6 +108,14 @@ public class CityScriptv2 : MonoBehaviour {
 		return null;
 	}
 
+	//Should update the list of player actions when there is no governor enabled on this city.
+	private void updatePlayerActions() {
+		if (!this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled) {
+			CityGovernorScript.playerDecisions.AddRange (Decisions);
+			CityGovernorScript.playerDecisions.ForEach (s => Debug.Log (s.ToString ()));
+		}
+	}
+
 	// public methods
 
 	public void CityUpdate() {
@@ -125,6 +123,7 @@ public class CityScriptv2 : MonoBehaviour {
 		 * Need a method to pass negative events (turns where a user decided not to add a city to the queue or anything else that might be situationally helpful)
 		 */
 		Decisions.ForEach (s => Debug.Log (s.ToString ()));
+		updatePlayerActions ();
 		currentFood += getTotalResource ("Food");
 		currentFood -= Citizens.Count;
 		currentProd += getTotalResource ("Production");
@@ -349,9 +348,13 @@ public class CityScriptv2 : MonoBehaviour {
 		return Decisions;
 	}
 
+	public bool getGovernorStatus() {
+		return this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled;
+	}
+
 	//public toggle methods
-	public bool toggleGovenor() {
-		return govenorEnable = !govenorEnable;
+	public bool toggleGovernor() {
+		return this.gameObject.GetComponent<CityGovernorScript> ().enabled = !this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled;
 	}
 
 	//User action and information store method(s)

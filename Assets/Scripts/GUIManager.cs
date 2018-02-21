@@ -141,14 +141,7 @@ public class GUIManager : MonoBehaviour {
 			uiPointer.position = Input.mousePosition;
 
 			List<RaycastResult> results = new List<RaycastResult> ();
-
 			uiRaycaster.Raycast (uiPointer, results);
-
-			foreach (RaycastResult result in results) {
-				Debug.Log ("Hit " + result.gameObject.name);
-			}
-
-			Debug.Log ("currently is selecting " + eventSystem.IsPointerOverGameObject());
 
 			if (!eventSystem.IsPointerOverGameObject ()) {
 				if (Physics.Raycast (cameraRay, out hit) && !selectedObject) {
@@ -216,9 +209,10 @@ public class GUIManager : MonoBehaviour {
 		}
 	}
 
-	public void toggleGovenor() {
+	public void toggleGovernor() {
+		Debug.Log (selectedObject.tag);
 		if (selectedObject.tag.Equals("City"))
-			selectedObject.GetComponent<CityScriptv2>().toggleGovenor();
+			selectedObject.GetComponent<CityScriptv2>().toggleGovernor();
 	}
 
 	// get methodology

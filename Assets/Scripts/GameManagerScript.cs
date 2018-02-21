@@ -64,6 +64,9 @@ public class GameManagerScript : MonoBehaviour {
 	}
 
 	public void endCurrentTurn() {
+		//update the A.I's dataset with current player decisions before any actions are taken.
+		//GameObject AI = 
+		//Now update all cities
 		Map.GetComponent<MapGenerationScript> ().updateAllCities();
 		turnNumber++;
 	}

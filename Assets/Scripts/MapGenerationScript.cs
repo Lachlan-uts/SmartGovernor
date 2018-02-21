@@ -37,8 +37,9 @@ public class MapGenerationScript : MonoBehaviour {
 	[SerializeField]
 	private float noiseZ = 15;
 
+	//Map Variables (Should they both be public static?
 	private GameObject[,] tileList;
-	private List<GameObject> cityList;
+	public static List<GameObject> cityList;
 
 	// influence map related calculation variables
 	private float[,] influenceBaseMap;

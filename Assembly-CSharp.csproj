@@ -53,6 +53,7 @@
   <ItemGroup>
      <Compile Include="Assets\Scripts\Buildables.cs" />
      <Compile Include="Assets\Scripts\CitizenScript.cs" />
+     <Compile Include="Assets\Scripts\CityGovernorScript.cs" />
      <Compile Include="Assets\Scripts\CityScriptv2.cs" />
      <Compile Include="Assets\Scripts\CLIScript.cs" />
      <Compile Include="Assets\Scripts\DecisionData.cs" />
