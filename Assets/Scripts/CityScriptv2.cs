@@ -113,6 +113,12 @@ public class CityScriptv2 : MonoBehaviour {
 		if (!this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled) {
 			if (Decisions.Count == 0) {
 				Decisions.Add (new DecisionData (Buildables.Newcity, false, Citizens.Count, GameManagerScript.turnNumber));
+
+				Dictionary<EnumCategories,int> passedEnums = new Dictionary<EnumCategories, int> {
+					{ EnumCategories.CitizenCount, Citizens.Count },
+					{ EnumCategories.TurnCount, GameManagerScript.turnNumber }
+				};
+				Decisions.Add (new DecisionData (Buildables.Newcity, false, passedEnums));
 			}
 			CityGovernorScript.playerDecisions.AddRange (Decisions);
 

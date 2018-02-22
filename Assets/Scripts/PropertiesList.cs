@@ -5,6 +5,7 @@ using AssemblyCSharp;
 
 public class PropertiesList {
 
+	//Newest Dictionary method.
 	public static Dictionary<Buildables,Property> dictProperties = new Dictionary<Buildables, Property> {
 		{ Buildables.Coinage, new Property ("Coinage", "Gold", 0, 0, true) },
 		{ Buildables.Factory, new Property ("Factory", "Production", 2, 16) },
