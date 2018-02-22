@@ -301,7 +301,6 @@ public class CLIScript : MonoBehaviour {
 		if (addToSS) {
 			SaveString = SaveString + ":" + InputCommand;
 		}
-		Debug.Log (SaveString);
 
 		CLITextInput.text = "";
 		CLITextInput.ActivateInputField ();

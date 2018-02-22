@@ -44,6 +44,19 @@ public class DecisionData {
 		return (T)(object)closestValue;
 	}
 
+	//Don't like these get methods, want to make it more generic
+	public bool getDecision() {
+		return decision;
+	}
+
+	public CitizenCount getCitizenCount() {
+		return cCount;
+	}
+
+	public TurnCount getTurnCount() {
+		return tCount;
+	}
+
 	public override string ToString() {
 		return buildTarget.ToString () + ", " + decision.ToString () + ", " + cCount.ToString () + ", " + tCount.ToString ();
 	}

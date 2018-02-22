@@ -111,8 +111,14 @@ public class CityScriptv2 : MonoBehaviour {
 	//Should update the list of player actions when there is no governor enabled on this city.
 	private void updatePlayerActions() {
 		if (!this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled) {
+			if (Decisions.Count == 0) {
+				Decisions.Add (new DecisionData (Buildables.Newcity, false, Citizens.Count, GameManagerScript.turnNumber));
+			}
 			CityGovernorScript.playerDecisions.AddRange (Decisions);
-			CityGovernorScript.playerDecisions.ForEach (s => Debug.Log (s.ToString ()));
+
+			//add directly to a frequency dictionary
+
+			Debug.Log (string.Join (";", CityGovernorScript.playerDecisions));
 		}
 	}
 
@@ -122,7 +128,6 @@ public class CityScriptv2 : MonoBehaviour {
 		/*
 		 * Need a method to pass negative events (turns where a user decided not to add a city to the queue or anything else that might be situationally helpful)
 		 */
-		Decisions.ForEach (s => Debug.Log (s.ToString ()));
 		updatePlayerActions ();
 		currentFood += getTotalResource ("Food");
 		currentFood -= Citizens.Count;
@@ -137,7 +142,6 @@ public class CityScriptv2 : MonoBehaviour {
 		if (!Build.getUse ()) {
 			Buildings.Add (Build);
 		} else { // Since this can currently only be used for "coinage", might as well put in the gold until we better develop this
-			Debug.Log(Build.getUnitName());
 			if (Build.getUnitName() == "") {
 				currentGold += (int)((1.0 * currentProd) / 2.0);
 				currentProd = 0;
