@@ -81,6 +81,10 @@ public class DecisionData {
 		return decision;
 	}
 
+	public Enum getFactor(EnumCategories enm) {
+		return factors [enm];
+	}
+
 	public CitizenCount getCitizenCount() {
 		return cCount;
 	}
