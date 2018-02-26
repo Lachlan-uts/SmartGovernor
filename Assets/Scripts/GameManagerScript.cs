@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour {
 
-	public static int turnNumber;
+	public static int turnNumber = 1;
 	private int turnPhase;
 	private List<GameObject> FactionManagers;
 	private GameObject GUI;

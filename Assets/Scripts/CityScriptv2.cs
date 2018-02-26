@@ -112,19 +112,28 @@ public class CityScriptv2 : MonoBehaviour {
 	private void updatePlayerActions() {
 		if (!this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled) {
 			if (Decisions.Count == 0) {
-				Decisions.Add (new DecisionData (Buildables.Newcity, false, Citizens.Count, GameManagerScript.turnNumber));
-
-				Dictionary<EnumCategories,int> passedEnums = new Dictionary<EnumCategories, int> {
-					{ EnumCategories.CitizenCount, Citizens.Count },
-					{ EnumCategories.TurnCount, GameManagerScript.turnNumber }
-				};
-				Decisions.Add (new DecisionData (Buildables.Newcity, false, passedEnums));
+				Decisions.Add (new DecisionData (false, this.Citizens.Count, GameManagerScript.turnNumber));
+				Decisions.Add (new DecisionData (false, this.Citizens.Count, GameManagerScript.turnNumber));
+				Debug.Log (Decisions [0].Equals (Decisions [1]));
+//
+//				Dictionary<EnumCategories,int> passedEnums = new Dictionary<EnumCategories, int> {
+//					{ EnumCategories.CitizenCount, Citizens.Count },
+//					{ EnumCategories.TurnCount, GameManagerScript.turnNumber }
+//				};
+//				Decisions.Add (new DecisionData (Buildables.Newcity, false, passedEnums));
 			}
-			CityGovernorScript.playerDecisions.AddRange (Decisions);
+//			CityGovernorScript.playerDecisions.AddRange (Decisions);
+
+			foreach (DecisionData decision in Decisions) {
+				int currentCount;
+				Debug.Log (CityGovernorScript.playerDecisionFrequency.ContainsKey (decision));
+				CityGovernorScript.playerDecisionFrequency.TryGetValue(decision, out currentCount);
+				CityGovernorScript.playerDecisionFrequency [decision] = currentCount + 1;
+			}
 
 			//add directly to a frequency dictionary
 
-			Debug.Log (string.Join (";", CityGovernorScript.playerDecisions));
+			Debug.Log (string.Join(" ; ", CityGovernorScript.playerDecisionFrequency.Keys));
 		}
 	}
 
@@ -245,7 +254,7 @@ public class CityScriptv2 : MonoBehaviour {
 				 * Food production rate
 				 * Food rule
 				 */
-				Decisions.Add(new DecisionData(buildy, true, Citizens.Count, GameManagerScript.turnNumber));
+				Decisions.Add(new DecisionData(true, this.Citizens.Count, GameManagerScript.turnNumber));
 			}
 			Queue.Add (attemptedProp);
 			return true;

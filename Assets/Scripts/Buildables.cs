@@ -18,14 +18,14 @@ namespace AssemblyCSharp
 	}
 	public enum CitizenCount
 	{
-		CitizenCount = 0,
+		//CitizenCount = 0,
 		Low = 1,
 		Med = 5,
 		High = 9
 	}
 	public enum TurnCount
 	{
-		TurnCount = 0,
+		//TurnCount = 0,
 		Early = 30,
 		Mid = 60,
 		Late = 90
