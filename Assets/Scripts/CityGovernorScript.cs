@@ -58,12 +58,17 @@ public class CityGovernorScript : MonoBehaviour {
 				}
 			}
 		}
+		Debug.Log ("The total is " + total);
+		Debug.Log ("Decision count is " + decisionCount);
 		//calculate probability from counts.
 		float p = 1.0f;
 		foreach (var factor in factorCounts) {
+			Debug.Log (factor.Key.ToString () + ": " + factor.Value);
 			p /= decisionCount;
 			p *= factor.Value;
+			Debug.Log ("p now is " + p);
 		}
-		return (decisionCount / total) * p;
+		Debug.Log ("The final value should be " + ((float)decisionCount / (float)total) + " * " + p);
+		return ((float)decisionCount / (float)total) * p;
 	}
 }

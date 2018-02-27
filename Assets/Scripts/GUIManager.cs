@@ -210,7 +210,6 @@ public class GUIManager : MonoBehaviour {
 	}
 
 	public void toggleGovernor() {
-		Debug.Log (selectedObject.tag);
 		if (selectedObject.tag.Equals("City"))
 			selectedObject.GetComponent<CityScriptv2>().toggleGovernor();
 	}
