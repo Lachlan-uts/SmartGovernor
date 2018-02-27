@@ -53,7 +53,7 @@ GameObject:
   - component: {fileID: 4062480675044950}
   - component: {fileID: 65162078168870740}
   - component: {fileID: 114509631673533240}
-  - component: {fileID: 114451794295994558}
+  - component: {fileID: 114478953355019236}
   m_Layer: 0
   m_Name: City
   m_TagString: City
@@ -68,7 +68,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1622012745668006}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 613.0771, y: 399.28674, z: -865.49506}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4738737148551030}
@@ -155,7 +155,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 2, y: 1, z: 2}
   m_Center: {x: 0, y: 1.5, z: 0}
---- !u!114 &114451794295994558
+--- !u!114 &114478953355019236
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}

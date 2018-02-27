@@ -11,9 +11,12 @@ public class DecisionData : IEquatable<DecisionData> {
 	public bool decision {get; private set;}
 
 	//List of factors relevent to decision.
-	private Dictionary<EnumCategories, Enum> factors = new Dictionary<EnumCategories, Enum> {};
+	public Dictionary<EnumCategories, Enum> factors {get; private set;}
 
 	public DecisionData (bool d, int cC, int tC) {
+		//initialise the dictionary
+		factors = new Dictionary<EnumCategories, Enum>();
+
 		decision = d;
 
 		factors.Add (EnumCategories.CitizenCount, getRightEnum<CitizenCount> (cC));

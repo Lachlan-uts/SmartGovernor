@@ -9,7 +9,9 @@ public class CityScriptv2 : MonoBehaviour {
 	private int currentProd; // Temporary variable for future production resource
 	private int currentGold; // Temporary variable for future gold accumulation
 
-	private List<GameObject> Citizens;
+	public List<GameObject> Citizens { get; private set; }
+
+
 	private List<GameObject> Tiles;
 	private List<GameObject> availableTiles;
 
@@ -137,6 +139,13 @@ public class CityScriptv2 : MonoBehaviour {
 		}
 	}
 
+	private void governorActions() {
+		if (this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled) {
+			Debug.Log ("Governor enabled!");
+			this.gameObject.GetComponent<CityGovernorScript> ().governorActions ();
+		}
+	}
+
 	// public methods
 
 	public void CityUpdate() {
@@ -144,6 +153,7 @@ public class CityScriptv2 : MonoBehaviour {
 		 * Need a method to pass negative events (turns where a user decided not to add a city to the queue or anything else that might be situationally helpful)
 		 */
 		updatePlayerActions ();
+		governorActions ();
 		currentFood += getTotalResource ("Food");
 		currentFood -= Citizens.Count;
 		currentProd += getTotalResource ("Production");
@@ -373,6 +383,7 @@ public class CityScriptv2 : MonoBehaviour {
 
 	//public toggle methods
 	public bool toggleGovernor() {
+		Debug.Log (this.gameObject.GetComponent<CityGovernorScript> ().enabled);
 		return this.gameObject.GetComponent<CityGovernorScript> ().enabled = !this.gameObject.GetComponent<CityGovernorScript> ().isActiveAndEnabled;
 	}
 
