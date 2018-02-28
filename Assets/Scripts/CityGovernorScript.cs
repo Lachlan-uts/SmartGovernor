@@ -65,7 +65,7 @@ public class CityGovernorScript : MonoBehaviour {
 				decisionCount += data.Value;
 				foreach (var factor in question.factors) {
 					if (data.Key.factors [factor.Key].Equals (factor.Value)) {
-						factorCounts[factor.Value] += 1;
+						factorCounts[factor.Value] += data.Value;
 					}
 				}
 			}
@@ -86,6 +86,6 @@ public class CityGovernorScript : MonoBehaviour {
 
 		}
 		Debug.Log ("The final value should be " + ((float)decisionCount / (float)total) + " * " + p + " * 1/" + fP);
-		return ((float)decisionCount / (float)total) * p * (1.0f/fP);
+		return ( (float)decisionCount / (float)total * p * (1.0f/fP));
 	}
 }
