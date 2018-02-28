@@ -78,7 +78,7 @@ public class CityGovernorScript : MonoBehaviour {
 		foreach (var factor in factorCounts) {
 			Debug.Log (factor.Key.ToString () + ": " + factor.Value);
 			Debug.Log (factor.Key.ToString () + " total: " + factorTotals[factor.Key]);
-			p /= factorTotals[factor.Key];
+			p /= decisionCount;
 			p *= factor.Value;
 			Debug.Log ("p now is " + p);
 			fP /= total;

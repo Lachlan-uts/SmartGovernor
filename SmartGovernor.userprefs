@@ -4,7 +4,7 @@
     <Files>
       <File FileName="Assets\Scripts\MapGenerationScript.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\CityScriptv2.cs" Line="1" Column="1" />
-      <File FileName="Assets\Scripts\CityGovernorScript.cs" Line="27" Column="1" />
+      <File FileName="Assets\Scripts\CityGovernorScript.cs" Line="81" Column="22" />
       <File FileName="Assets\Scripts\DecisionData.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\GUIManager.cs" Line="1" Column="1" />
       <File FileName="Assets\Scripts\QueuePanelScript.cs" Line="1" Column="1" />
