@@ -127,7 +127,7 @@ public class CityScriptv2 : MonoBehaviour {
 				CityGovernorScript.playerDecisionFrequency.TryGetValue(decision, out currentCount);
 				CityGovernorScript.playerDecisionFrequency [decision] = currentCount + 1;
 			}
-			Debug.Log (string.Join(" ; ", CityGovernorScript.playerDecisionFrequency.Keys));
+			Debug.Log (string.Join(" ; ", CityGovernorScript.playerDecisionFrequency));
 		}
 	}
 

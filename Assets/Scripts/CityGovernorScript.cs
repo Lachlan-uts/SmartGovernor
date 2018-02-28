@@ -38,17 +38,29 @@ public class CityGovernorScript : MonoBehaviour {
 	}
 
 	private float calculateNaiveBayes(DecisionData question) {
-		int total = 0;
 		int decisionCount = 0;
+		int total = 0;
 
 		Dictionary<Enum,int> factorCounts = new Dictionary<Enum, int> ();
+		Dictionary<Enum,int> factorTotals = new Dictionary<Enum, int> ();
+
+		Dictionary<Enum,Dictionary<string,int>> factorData = new Dictionary<Enum, Dictionary<string, int>> ();
 
 		foreach (var factor in question.factors) {
 			factorCounts [factor.Value] = 0;
+			factorTotals [factor.Value] = 0;
+			//factorData [factor.Value] ["Count"] = 0;
+			//factorData [factor.Value] ["Total"] = 0;
 		}
+			
 
 		foreach (var data in playerDecisionFrequency) {
 			total += data.Value;
+			foreach (var factorT in question.factors) {
+				if (data.Key.factors [factorT.Key].Equals (factorT.Value)) {
+					factorTotals [factorT.Value] += data.Value;
+				}
+			}
 			if (data.Key.decision == question.decision) {
 				decisionCount += data.Value;
 				foreach (var factor in question.factors) {
@@ -62,13 +74,18 @@ public class CityGovernorScript : MonoBehaviour {
 		Debug.Log ("Decision count is " + decisionCount);
 		//calculate probability from counts.
 		float p = 1.0f;
+		float fP = 1.0f;
 		foreach (var factor in factorCounts) {
 			Debug.Log (factor.Key.ToString () + ": " + factor.Value);
-			p /= decisionCount;
+			Debug.Log (factor.Key.ToString () + " total: " + factorTotals[factor.Key]);
+			p /= factorTotals[factor.Key];
 			p *= factor.Value;
 			Debug.Log ("p now is " + p);
+			fP /= total;
+			fP *= factorTotals[factor.Key];
+
 		}
-		Debug.Log ("The final value should be " + ((float)decisionCount / (float)total) + " * " + p);
-		return ((float)decisionCount / (float)total) * p;
+		Debug.Log ("The final value should be " + ((float)decisionCount / (float)total) + " * " + p + " * 1/" + fP);
+		return ((float)decisionCount / (float)total) * p * (1.0f/fP);
 	}
 }
