@@ -23,18 +23,21 @@ public class CityGovernorScript : MonoBehaviour {
 	}
 
 	public void governorActions() {
-		float cityBuild = calculateNaiveBayes (getQuestion());
-		Debug.Log("The probability of building a city is." + cityBuild);
+		float cityBuild = calculateNaiveBayes (getQuestion(true));
+		float notCityBuild = calculateNaiveBayes (getQuestion(false));
+		Debug.Log ("city build = " + cityBuild);
+		Debug.Log ("not city build = " + notCityBuild);
+		Debug.Log("The probability of building a city is." + cityBuild/(cityBuild+notCityBuild));
 		if (cityBuild >= UnityEngine.Random.Range (0.0f, 1.0f)) {
 			//trigger build city
 			Debug.Log("The city build was triggered");
-			Debug.Log("The city build was triggered");
+			attachedCity.AddToQueue (Buildables.Newcity);
 		}
 	}
 
-	private DecisionData getQuestion() {
+	private DecisionData getQuestion(bool decision) {
 		//currently hardcoded to a single question, but could be easily adjusted in future.
-		return new DecisionData (true, attachedCity.Citizens.Count, GameManagerScript.turnNumber);
+		return new DecisionData (decision, attachedCity.Citizens.Count, GameManagerScript.turnNumber);
 	}
 
 	private float calculateNaiveBayes(DecisionData question) {
@@ -85,7 +88,7 @@ public class CityGovernorScript : MonoBehaviour {
 			fP *= factorTotals[factor.Key];
 
 		}
-		Debug.Log ("The final value should be " + ((float)decisionCount / (float)total) + " * " + p + " * 1/" + fP);
-		return ( (float)decisionCount / (float)total * p * (1.0f/fP));
+		Debug.Log ("The final value should be " + ((float)decisionCount / (float)total) + " * " + p);
+		return ( (float)decisionCount / (float)total * p);
 	}
 }
